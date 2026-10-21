@@ -20,7 +20,7 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
 </header>
 <section class="hero"><div class="hero-inner">
 <div><div class="eyebrow">A clearer view of faith and public life</div><h1>What the world's religious leaders are saying.</h1><p>Official statements, public posts and news coverage from across religious traditions — brought together with concise summaries and links to the source.</p></div>
-<div class="hero-card"><div class="hero-stat"><div><div class="caption">TRADITIONS COVERED</div><div class="number">6 traditions</div></div><div style="font-size:29px">🌍</div></div><div class="hero-stat" style="margin-top:12px"><div><div class="caption">FIGURES TO EXPLORE</div><div class="number">8 profiles</div></div><div style="font-size:26px">🕊️</div></div><div class="demo-note"><span class="live-dot"></span><strong>Connecting to the live feed:</strong> loading stories from configured sources.</div></div>
+<div class="hero-card"><div class="hero-stat"><div><div class="caption">TRADITIONS COVERED</div><div class="number">6 traditions</div></div><div style="font-size:29px">🌍</div></div><div class="hero-stat" style="margin-top:12px"><div><div class="caption">FIGURES TO EXPLORE</div><div class="number">2 profiles</div></div><div style="font-size:26px">🕊️</div></div><div class="demo-note"><span class="live-dot"></span><strong>Connecting to the live feed:</strong> loading stories from configured sources.</div></div>
 </div></section>
 <main>
 <div class="toolbar"><label class="searchbox"><span>⌕</span><input id="search" type="search" placeholder="Search people, topics, statements…"></label><select class="select" id="subTraditionFilter" aria-label="Filter by denomination or tradition branch" disabled><option value="all">Choose a main tradition first</option></select><select class="select" id="typeFilter" aria-label="Filter by content type"><option value="all">All content types</option><option value="Official statement">Official statements</option><option value="News coverage">News coverage</option><option value="Social post">Social posts</option><option value="Speech">Speeches</option></select><button class="refresh" id="refresh">↻ Refresh feed</button></div>
@@ -101,15 +101,13 @@ function readStoredSet(key, fallback=[]) {
   try { const value=JSON.parse(localStorage.getItem(key)||"null"); return new Set(Array.isArray(value)?value:fallback); }
   catch { return new Set(fallback); }
 }
-let followed=readStoredSet("archangel.followedFigures",["pope","sarah-mullally"]);\nfollowed = new Set([...followed].filter(id => figures.some(f => f.id === id)));
+let followed=readStoredSet("archangel.followedFigures",["pope","sarah-mullally"]);
+followed = new Set([...followed].filter(id => figures.some(f => f.id === id)));
 let saved=readStoredSet("archangel.savedStories",[]);
 function persistSet(key, value) {
   try { localStorage.setItem(key, JSON.stringify([...value])); }
   catch { toast("Preferences could not be saved in this browser"); }
 }
-// Archangel is currently configured to follow only Pope Leo XIV.
-followed = new Set(["pope"]);
-persistSet("archangel.followedFigures", followed);
 function findRelatedFigures(story, sourceName="") {
   const title = (story.title || "").toLowerCase();
   const summary = (story.summary || "").toLowerCase();
@@ -154,7 +152,7 @@ document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{
 syncViewButtons();
 renderSubTraditionOptions();
 $("refresh").onclick=()=>loadLiveFeed(true);
-$("howBtn").onclick=()=>alert("Archangel brings together public updates from configured institutional and news sources. Each card links to the original publisher. Source coverage is not exhaustive, and no single institution represents every member of a religious tradition. Follow and saved-story preferences are saved in this browser on this device. Following only includes stories that can be matched to a followed figure by name or configured source; some stories may not yet be linked to a figure.");
+$("howBtn").onclick=()=>alert("Archangel brings together public updates from configured institutional and news sources. Each card links to the original publisher. Source coverage is not exhaustive, and no single institution represents every member of a religious tradition. Follow and saved-story preferences are saved in this browser on this device. Following includes stories that explicitly mention a followed figure or come from that figure’s configured official source.");
 renderFigures();renderStories();
 
 // If public Supabase configuration is supplied in public/config.js, load live
