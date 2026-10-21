@@ -20,7 +20,7 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
 </header>
 <section class="hero"><div class="hero-inner">
 <div><div class="eyebrow">A clearer view of faith and public life</div><h1>What the world's religious leaders are saying.</h1><p>Official statements, public posts and news coverage from across religious traditions — brought together with concise summaries and links to the source.</p></div>
-<div class="hero-card"><div class="hero-stat"><div><div class="caption">TRADITIONS COVERED</div><div class="number">6 traditions</div></div><div style="font-size:29px">🌍</div></div><div class="hero-stat" style="margin-top:12px"><div><div class="caption">FIGURES TO EXPLORE</div><div class="number">2 profiles</div></div><div style="font-size:26px">🕊️</div></div><div class="demo-note"><span class="live-dot"></span><strong>Connecting to the live feed:</strong> loading stories from configured sources.</div></div>
+<div class="hero-card"><div class="hero-stat"><div><div class="caption">TRADITIONS COVERED</div><div class="number">6 traditions</div></div><div style="font-size:29px">🌍</div></div><div class="hero-stat" style="margin-top:12px"><div><div class="caption">FIGURES TO EXPLORE</div><div class="number">8 profiles</div></div><div style="font-size:26px">🕊️</div></div><div class="demo-note"><span class="live-dot"></span><strong>Connecting to the live feed:</strong> loading stories from configured sources.</div></div>
 </div></section>
 <main>
 <div class="toolbar"><label class="searchbox"><span>⌕</span><input id="search" type="search" placeholder="Search people, topics, statements…"></label><select class="select" id="subTraditionFilter" aria-label="Filter by denomination or tradition branch" disabled><option value="all">Choose a main tradition first</option></select><select class="select" id="typeFilter" aria-label="Filter by content type"><option value="all">All content types</option><option value="Official statement">Official statements</option><option value="News coverage">News coverage</option><option value="Social post">Social posts</option><option value="Speech">Speeches</option></select><button class="refresh" id="refresh">↻ Refresh feed</button></div>
@@ -101,13 +101,15 @@ function readStoredSet(key, fallback=[]) {
   try { const value=JSON.parse(localStorage.getItem(key)||"null"); return new Set(Array.isArray(value)?value:fallback); }
   catch { return new Set(fallback); }
 }
-let followed=readStoredSet("archangel.followedFigures",["pope","sarah-mullally"]);
-followed = new Set([...followed].filter(id => figures.some(f => f.id === id)));
+let followed=readStoredSet("archangel.followedFigures",["pope","sarah-mullally"]);\nfollowed = new Set([...followed].filter(id => figures.some(f => f.id === id)));
 let saved=readStoredSet("archangel.savedStories",[]);
 function persistSet(key, value) {
   try { localStorage.setItem(key, JSON.stringify([...value])); }
   catch { toast("Preferences could not be saved in this browser"); }
 }
+// Archangel is currently configured to follow only Pope Leo XIV.
+followed = new Set(["pope"]);
+persistSet("archangel.followedFigures", followed);
 function findRelatedFigures(story, sourceName="") {
   const title = (story.title || "").toLowerCase();
   const summary = (story.summary || "").toLowerCase();
@@ -122,8 +124,9 @@ function findRelatedFigures(story, sourceName="") {
     }
     if (f.id === "sarah-mullally") {
       const explicitMention = /\\b(sarah mullally|archbishop sarah|archbishop of canterbury|dame sarah mullally)\\b/i.test(text);
-      const officialFeed = source.includes("archbishop of canterbury");
-return explicitMention || officialFeed;
+      const officialFeed = source === "archbishop of canterbury — news and statements" ||
+                           source === "archbishop of canterbury";
+      return explicitMention || officialFeed;
     }
     return false;
   }).map(f => f.id);
@@ -151,7 +154,7 @@ document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{
 syncViewButtons();
 renderSubTraditionOptions();
 $("refresh").onclick=()=>loadLiveFeed(true);
-$("howBtn").onclick=()=>alert("Archangel brings together public updates from configured institutional and news sources. Each card links to the original publisher. Source coverage is not exhaustive, and no single institution represents every member of a religious tradition. Follow and saved-story preferences are saved in this browser on this device. Following includes stories that explicitly mention a followed figure or come from that figure’s configured official source.");
+$("howBtn").onclick=()=>alert("Archangel brings together public updates from configured institutional and news sources. Each card links to the original publisher. Source coverage is not exhaustive, and no single institution represents every member of a religious tradition. Follow and saved-story preferences are saved in this browser on this device. Following only includes stories that can be matched to a followed figure by name or configured source; some stories may not yet be linked to a figure.");
 renderFigures();renderStories();
 
 // If public Supabase configuration is supplied in public/config.js, load live
@@ -172,11 +175,42 @@ async function loadLiveFeed(manual = false) {
   }
   try {
     const client = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
-    const { data, error } = await client.from("stories")
-      .select("id,title,summary,story_url,published_at,tradition,content_type,summary_is_ai,source_id,sources(name,sub_tradition)")
+    const storyFields = "id,title,summary,story_url,published_at,tradition,content_type,summary_is_ai,source_id,sources(name,sub_tradition)";
+
+    // Load the newest stories for Discover.
+    const { data: recentData, error: recentError } = await client.from("stories")
+      .select(storyFields)
       .order("published_at", { ascending: false, nullsFirst: false }).limit(100);
-    if (error) throw error;
-    if (!data || !data.length) {
+    if (recentError) throw recentError;
+
+    // Also load all available stories from Sarah's official source, even if
+    // they are older than the 100 newest stories in the general feed.
+    const { data: sarahSources, error: sourceError } = await client.from("sources")
+      .select("id")
+      .eq("name", "Archbishop of Canterbury")
+      .eq("enabled", true);
+    if (sourceError) throw sourceError;
+
+    let sarahData = [];
+    const sarahSourceIds = (sarahSources || []).map(source => source.id);
+    if (sarahSourceIds.length) {
+      const { data: officialStories, error: officialError } = await client.from("stories")
+        .select(storyFields)
+        .in("source_id", sarahSourceIds)
+        .order("published_at", { ascending: false, nullsFirst: false })
+        .limit(100);
+      if (officialError) throw officialError;
+      sarahData = officialStories || [];
+    }
+
+    // Merge the two sets and deduplicate by story ID.
+    const merged = new Map();
+    [...(recentData || []), ...sarahData].forEach(story => merged.set(story.id, story));
+    const data = [...merged.values()].sort((a, b) =>
+      new Date(b.published_at || 0) - new Date(a.published_at || 0)
+    );
+
+    if (!data.length) {
       liveFeedStatus = "Connected, but no stories have been ingested yet.";
       renderStories();
       if (manual) toast("Connected, but no stories found yet");
