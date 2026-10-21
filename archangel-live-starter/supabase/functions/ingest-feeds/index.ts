@@ -33,6 +33,89 @@ function entries(xml: string) {
     return { id, title: tag(item, "title") || "Untitled update", link, date, description: desc.slice(0, 5000) };
   }).filter(x => x.link && /^https?:\/\//i.test(x.link));
 }
+function cleanHtml(value: string): string {
+  return decodeXml(
+    value
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+      .replace(/<[^>]+>/g, " ")
+  ).replace(/\s+/g, " ").trim();
+}
+
+async function fetchArchbishopNews() {
+  const found = new Map<string, {
+    id: string;
+    title: string;
+    link: string;
+    date: string;
+    description: string;
+  }>();
+
+  // Read several pages of the official news listing.
+  for (let page = 0; page < 5; page++) {
+    const url =
+      `https://www.archbishopofcanterbury.org/news?page=${page}`;
+
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent": "ArchangelFeedBot/1.0 (RSS reader)",
+        "Accept": "text/html"
+      },
+      signal: AbortSignal.timeout(12000)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Archbishop news page returned HTTP ${response.status}`);
+    }
+
+    const html = await response.text();
+
+    const anchors = /<a\b([^>]*href=["']([^"']+)["'][^>]*)>([\s\S]*?)<\/a>/gi;
+    let match: RegExpExecArray | null;
+
+    while ((match = anchors.exec(html)) !== null) {
+      const href = match[2];
+      const title = cleanHtml(match[3]);
+
+      if (!title || title.length < 12 || title.length > 300) continue;
+
+      let link: URL;
+      try {
+        link = new URL(href, "https://www.archbishopofcanterbury.org");
+      } catch {
+        continue;
+      }
+
+      if (link.hostname !== "www.archbishopofcanterbury.org") continue;
+
+      // Accept individual news articles and speeches, not generic site pages.
+      if (!/^\/(news|speeches)\/[^/?#]+\/?$/.test(link.pathname)) continue;
+
+      const articleUrl = link.origin + link.pathname.replace(/\/$/, "");
+      if (found.has(articleUrl)) continue;
+
+      // Try to find a date in the nearby article-card markup.
+      const nearby = html.slice(
+        Math.max(0, match.index - 1200),
+        Math.min(html.length, anchors.lastIndex + 1200)
+      );
+
+      const dateMatch =
+        nearby.match(/datetime=["']([^"']+)["']/i) ||
+        nearby.match(/(\d{1,2}\s+[A-Z][a-z]+\s+\d{4})/);
+
+      found.set(articleUrl, {
+        id: articleUrl,
+        title,
+        link: articleUrl,
+        date: dateMatch?.[1] || "",
+        description: ""
+      });
+    }
+  }
+
+  return [...found.values()].slice(0, 100);
+} 
 async function makeSummary(title: string, description: string) {
   const fallback = (description || title).replace(/\s+/g, " ").slice(0, 420);
   if (!openAiKey) return { summary: fallback || title, ai: false };
