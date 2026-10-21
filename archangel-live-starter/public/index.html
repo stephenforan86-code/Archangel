@@ -56,16 +56,7 @@ const figures=[
     url:"https://www.archbishopofcanterbury.org/news"
   }
 ];
-const stories=[
-{id:1,figure:"pope",tradition:"Christianity",subTradition:"Catholic",type:"Official statement",title:"How Archangel will track papal messages and Vatican announcements",summary:"This example shows how a Vatican statement could appear: a short neutral summary, key context and a direct link to the institution's original publication. This is placeholder copy, not a report of a current papal statement.",date:"Demo example",topic:"Vatican · Public statements",source:"Vatican News",url:"https://www.vaticannews.va/en.html",icon:"✝"},
-{id:2,figure:"dalai",tradition:"Buddhism",subTradition:"Vajrayana",type:"News coverage",title:"A model for summarising public teachings and interviews",summary:"A news item about a Buddhist leader would summarise the reported remarks, identify the publisher and separate the journalist's framing from direct quotations. This is an illustrative entry, not a current news story.",date:"Demo example",topic:"Teaching · Interviews",source:"The Office of His Holiness the Dalai Lama",url:"https://www.dalailama.com/",icon:"☸"},
-{id:3,figure:"azhar",tradition:"Islam",subTradition:"Sunni",type:"Official statement",title:"Tracking statements on interfaith dialogue and public life",summary:"Official institutional announcements can help readers follow public positions on dialogue, education and social issues. A live version would quote or summarise a specific statement and preserve its original date and wording.",date:"Demo example",topic:"Dialogue · Public life",source:"Al-Azhar",url:"https://www.azhar.eg/",icon:"☾"},
-{id:4,figure:"chief-rabbi",tradition:"Judaism",subTradition:"Orthodox",type:"News coverage",title:"Following official religious announcements with source context",summary:"Coverage would identify whether a story comes from an official religious body or an independent newsroom, and link to the original announcement whenever possible. This sample does not describe a specific event.",date:"Demo example",topic:"Institutions · Announcements",source:"Chief Rabbinate of Israel",url:"https://www.gov.il/en/departments/chief_rabbinate_of_israel/govil-landing-page",icon:"✡"},
-{id:5,figure:"shankaracharya",tradition:"Hinduism",subTradition:"Advaita Vedanta / Smartism",type:"Speech",title:"Bringing public teachings and speeches into one feed",summary:"The platform could surface published speeches, public lectures and institutional updates, with a concise explanation of the subject and a source link. This is a product example, not a statement attributed to a specific individual.",date:"Demo example",topic:"Speeches · Teachings",source:"Background reference",url:"https://www.britannica.com/topic/Shankaracharya",icon:"ॐ"},
-{id:6,figure:"akal",tradition:"Sikhism",subTradition:"Sikh institutions",type:"Official statement",title:"A dedicated place for Sikh institutional updates",summary:"A live feed could collect public notices and statements from Sikh institutions, clearly noting the issuing body, publication date and original page. This placeholder is not a current Akal Takht announcement.",date:"Demo example",topic:"Sikh institutions · Public notices",source:"Shiromani Gurdwara Parbandhak Committee",url:"https://sgpc.net/",icon:"☬"},
-{id:7,figure:"welby",tradition:"Christianity",subTradition:"Anglican / Church of England",type:"Social post",title:"How public social posts will be attributed",summary:"When a leader posts publicly on a supported social platform, the feed would show the account name, post time and a link to the original post. No social account has been connected in this prototype.",date:"Demo example",topic:"Social media · Attribution",source:"Church of England",url:"https://www.churchofengland.org/media",icon:"✝"},
-{id:8,figure:"ecumenical",tradition:"Christianity",subTradition:"Eastern Orthodox",type:"Official statement",title:"Adding Orthodox Christian statements to multi-faith coverage",summary:"The same editorial format would apply across traditions: a concise summary, clear attribution, publication date and a source link, without treating any single institution as representative of every believer.",date:"Demo example",topic:"Orthodox Christianity · Statements",source:"Ecumenical Patriarchate",url:"https://www.patriarchate.org/",icon:"✝"}
-];
+const stories=[];
 let religion="All traditions",subTradition="all",type="all",query="";
 const subTraditions={
   "Christianity":["Catholic","Anglican / Church of England","Eastern Orthodox","Oriental Orthodox","Baptist","Methodist","Pentecostal","Lutheran","Presbyterian / Reformed","Evangelical","Other Christian"],
@@ -110,7 +101,7 @@ function readStoredSet(key, fallback=[]) {
   try { const value=JSON.parse(localStorage.getItem(key)||"null"); return new Set(Array.isArray(value)?value:fallback); }
   catch { return new Set(fallback); }
 }
-let followed=readStoredSet("archangel.followedFigures",["pope","dalai"]);
+let followed=readStoredSet("archangel.followedFigures",["pope","sarah-mullally"]);\nfollowed = new Set([...followed].filter(id => figures.some(f => f.id === id)));
 let saved=readStoredSet("archangel.savedStories",[]);
 function persistSet(key, value) {
   try { localStorage.setItem(key, JSON.stringify([...value])); }
@@ -120,17 +111,30 @@ function persistSet(key, value) {
 followed = new Set(["pope"]);
 persistSet("archangel.followedFigures", followed);
 function findRelatedFigures(story, sourceName="") {
-  // Following is deliberately strict: the Pope is matched only by an explicit
-  // name mention, or by the dedicated Holy See Press Office bulletin source.
-  const text=[story.title,story.summary].filter(Boolean).join(" ").toLowerCase();
-  const explicitlyMentionsPope = /\bpope\s+leo\s+xiv\b|\bleo\s+xiv\b|\bpope\s+leo\b|\brobert\s+prevost\b/.test(text);
-  const officialPapalBulletin = sourceName.toLowerCase().includes("holy see press office") && sourceName.toLowerCase().includes("english bulletin");
-  return explicitlyMentionsPope || officialPapalBulletin ? ["pope"] : [];
+  const title = (story.title || "").toLowerCase();
+  const summary = (story.summary || "").toLowerCase();
+  const text = [title, summary].join(" ");
+  const source = (sourceName || "").trim().toLowerCase();
+
+  return figures.filter(f => {
+    if (f.id === "pope") {
+      const explicitMention = /\\b(pope leo xiv|leo xiv|pope leo|robert prevost)\\b/i.test(text);
+      const officialFeed = source === "holy see press office — english bulletin";
+      return explicitMention || officialFeed;
+    }
+    if (f.id === "sarah-mullally") {
+      const explicitMention = /\\b(sarah mullally|archbishop sarah|archbishop of canterbury|dame sarah mullally)\\b/i.test(text);
+      const officialFeed = source === "archbishop of canterbury — news and statements" ||
+                           source === "archbishop of canterbury";
+      return explicitMention || officialFeed;
+    }
+    return false;
+  }).map(f => f.id);
 }
 let liveFeedStatus="Connecting to configured sources…", liveFeedLoading=false, lastLiveRefresh=null;
 const $=id=>document.getElementById(id);
 function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window._toast);window._toast=setTimeout(()=>t.classList.remove("show"),2400)}
-function currentStories(){return stories.filter(s=>(religion==="All traditions"||s.tradition===religion)&&(subTradition==="all"||s.subTradition===subTradition)&&(type==="all"||s.type===type)&&(view!=="following"||((s.figureIds||[s.figure]).some(id=>followed.has(id))))&&(view!=="saved"||saved.has(s.id))&&(!query||[s.title,s.summary,s.source,s.topic,s.tradition,figures.find(f=>f.id===s.figure)?.name].join(" ").toLowerCase().includes(query.toLowerCase())))}
+function currentStories(){return stories.filter(s=>(religion==="All traditions"||s.tradition===religion)&&(subTradition==="all"||s.subTradition===subTradition)&&(type==="all"||s.type===type)&&(view!=="following"||((s.figureIds||[]).some(id=>followed.has(id))))&&(view!=="saved"||saved.has(s.id))&&(!query||[s.title,s.summary,s.source,s.topic,s.tradition,figures.find(f=>f.id===s.figure)?.name].join(" ").toLowerCase().includes(query.toLowerCase())))}
 function renderStories(){const arr=currentStories();$("countLabel").textContent=arr.length+" "+(arr.length===1?"story":"stories");$("feedTitle").textContent=view==="saved"?"Saved stories":view==="following"?"Your following feed":"Latest updates";$("feedSubtitle").textContent=view==="saved"?"Stories you've bookmarked in this browser.":view==="following"?"Updates from figures you've chosen to follow.":liveFeedStatus;if(!arr.length){$("stories").innerHTML='<div class="empty"><strong>Nothing here just yet</strong>Try another tradition, clear your search, or save a story from Discover.</div>';return}
 $("stories").innerHTML=arr.map(s=>{const f=figures.find(f=>f.id===s.figure);const isFigureStory=!!f&&(s.figureIds||[s.figure]).includes(f.id);const headline=isFigureStory?f.name:(s.source||"Original source");const subline=isFigureStory?`${s.tradition} · ${f.role}`:`${s.tradition} · Source update`;return `<article class="story"><div class="story-top"><div class="avatar">${isFigureStory?s.icon:"✳"}</div><div class="who"><strong>${headline}</strong><small>${subline}</small></div><span class="kind ${s.type==="News coverage"?"news":s.type==="Social post"?"social":""}">${s.type}</span></div><h3>${s.title}</h3><p>${s.summary}</p><div class="story-meta"><span>${s.date}</span><span class="dot"></span><span>${s.topic}</span></div><div class="story-actions"><a class="source" href="${s.url}" target="_blank" rel="noopener noreferrer">↗ Visit source</a><button class="action ${saved.has(s.id)?"saved":""}" data-save="${s.id}">${saved.has(s.id)?"✓ Saved":"☆ Save"}</button><button class="action" data-share="${s.id}">↗ Share</button><span class="spacer"></span><span style="font-size:10px;color:#8a948d">Original source</span></div></article>`}).join("");
 document.querySelectorAll("[data-save]").forEach(b=>b.onclick=()=>{const id=stories.find(s=>String(s.id)===b.dataset.save)?.id;if(id===undefined)return;saved.has(id)?saved.delete(id):saved.add(id);persistSet("archangel.savedStories",saved);renderStories();toast(saved.has(id)?"Story saved":"Removed from saved stories")});
