@@ -23,7 +23,7 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
 <div class="hero-card"><div class="hero-stat"><div><div class="caption">TRADITIONS COVERED</div><div class="number">6 traditions</div></div><div style="font-size:29px">🌍</div></div><div class="hero-stat" style="margin-top:12px"><div><div class="caption">FIGURES TO EXPLORE</div><div class="number">8 profiles</div></div><div style="font-size:26px">🕊️</div></div><div class="demo-note"><span class="live-dot"></span><strong>Connecting to the live feed:</strong> loading stories from configured sources.</div></div>
 </div></section>
 <main>
-<div class="toolbar"><label class="searchbox"><span>⌕</span><input id="search" type="search" placeholder="Search people, topics, statements…"></label><select class="select" id="typeFilter" aria-label="Filter by content type"><option value="all">All content types</option><option value="Official statement">Official statements</option><option value="News coverage">News coverage</option><option value="Social post">Social posts</option><option value="Speech">Speeches</option></select><button class="refresh" id="refresh">↻ Refresh feed</button></div>
+<div class="toolbar"><label class="searchbox"><span>⌕</span><input id="search" type="search" placeholder="Search people, topics, statements…"></label><select class="select" id="subTraditionFilter" aria-label="Filter by denomination or tradition branch" disabled><option value="all">Choose a main tradition first</option></select><select class="select" id="typeFilter" aria-label="Filter by content type"><option value="all">All content types</option><option value="Official statement">Official statements</option><option value="News coverage">News coverage</option><option value="Social post">Social posts</option><option value="Speech">Speeches</option></select><button class="refresh" id="refresh">↻ Refresh feed</button></div>
 <div class="tabs" id="religionTabs"><button class="tab active" data-religion="All traditions">All traditions</button><button class="tab" data-religion="Christianity">✳ Christianity</button><button class="tab" data-religion="Islam">☾ Islam</button><button class="tab" data-religion="Judaism">✡ Judaism</button><button class="tab" data-religion="Hinduism">ॐ Hinduism</button><button class="tab" data-religion="Buddhism">☸ Buddhism</button><button class="tab" data-religion="Sikhism">☬ Sikhism</button></div>
 <div class="layout"><section><div class="feed-head"><div><h2 id="feedTitle">Latest updates</h2><p id="feedSubtitle">Connecting to configured sources…</p></div><div class="sort" id="countLabel">6 stories</div></div><div class="stories" id="stories"></div></section>
 <aside class="sidebar">
@@ -47,16 +47,38 @@ const figures=[
 {id:"ecumenical",name:"Ecumenical Patriarchate",tradition:"Christianity",role:"Eastern Orthodox Church",icon:"✝",source:"Official website",url:"https://www.patriarchate.org/"}
 ];
 const stories=[
-{id:1,figure:"pope",tradition:"Christianity",type:"Official statement",title:"How Archangel will track papal messages and Vatican announcements",summary:"This example shows how a Vatican statement could appear: a short neutral summary, key context and a direct link to the institution's original publication. This is placeholder copy, not a report of a current papal statement.",date:"Demo example",topic:"Vatican · Public statements",source:"Vatican News",url:"https://www.vaticannews.va/en.html",icon:"✝"},
-{id:2,figure:"dalai",tradition:"Buddhism",type:"News coverage",title:"A model for summarising public teachings and interviews",summary:"A news item about a Buddhist leader would summarise the reported remarks, identify the publisher and separate the journalist's framing from direct quotations. This is an illustrative entry, not a current news story.",date:"Demo example",topic:"Teaching · Interviews",source:"The Office of His Holiness the Dalai Lama",url:"https://www.dalailama.com/",icon:"☸"},
-{id:3,figure:"azhar",tradition:"Islam",type:"Official statement",title:"Tracking statements on interfaith dialogue and public life",summary:"Official institutional announcements can help readers follow public positions on dialogue, education and social issues. A live version would quote or summarise a specific statement and preserve its original date and wording.",date:"Demo example",topic:"Dialogue · Public life",source:"Al-Azhar",url:"https://www.azhar.eg/",icon:"☾"},
-{id:4,figure:"chief-rabbi",tradition:"Judaism",type:"News coverage",title:"Following official religious announcements with source context",summary:"Coverage would identify whether a story comes from an official religious body or an independent newsroom, and link to the original announcement whenever possible. This sample does not describe a specific event.",date:"Demo example",topic:"Institutions · Announcements",source:"Chief Rabbinate of Israel",url:"https://www.gov.il/en/departments/chief_rabbinate_of_israel/govil-landing-page",icon:"✡"},
-{id:5,figure:"shankaracharya",tradition:"Hinduism",type:"Speech",title:"Bringing public teachings and speeches into one feed",summary:"The platform could surface published speeches, public lectures and institutional updates, with a concise explanation of the subject and a source link. This is a product example, not a statement attributed to a specific individual.",date:"Demo example",topic:"Speeches · Teachings",source:"Background reference",url:"https://www.britannica.com/topic/Shankaracharya",icon:"ॐ"},
-{id:6,figure:"akal",tradition:"Sikhism",type:"Official statement",title:"A dedicated place for Sikh institutional updates",summary:"A live feed could collect public notices and statements from Sikh institutions, clearly noting the issuing body, publication date and original page. This placeholder is not a current Akal Takht announcement.",date:"Demo example",topic:"Sikh institutions · Public notices",source:"Shiromani Gurdwara Parbandhak Committee",url:"https://sgpc.net/",icon:"☬"},
-{id:7,figure:"welby",tradition:"Christianity",type:"Social post",title:"How public social posts will be attributed",summary:"When a leader posts publicly on a supported social platform, the feed would show the account name, post time and a link to the original post. No social account has been connected in this prototype.",date:"Demo example",topic:"Social media · Attribution",source:"Church of England",url:"https://www.churchofengland.org/media",icon:"✝"},
-{id:8,figure:"ecumenical",tradition:"Christianity",type:"Official statement",title:"Adding Orthodox Christian statements to multi-faith coverage",summary:"The same editorial format would apply across traditions: a concise summary, clear attribution, publication date and a source link, without treating any single institution as representative of every believer.",date:"Demo example",topic:"Orthodox Christianity · Statements",source:"Ecumenical Patriarchate",url:"https://www.patriarchate.org/",icon:"✝"}
+{id:1,figure:"pope",tradition:"Christianity",subTradition:"Catholic",type:"Official statement",title:"How Archangel will track papal messages and Vatican announcements",summary:"This example shows how a Vatican statement could appear: a short neutral summary, key context and a direct link to the institution's original publication. This is placeholder copy, not a report of a current papal statement.",date:"Demo example",topic:"Vatican · Public statements",source:"Vatican News",url:"https://www.vaticannews.va/en.html",icon:"✝"},
+{id:2,figure:"dalai",tradition:"Buddhism",subTradition:"Vajrayana",type:"News coverage",title:"A model for summarising public teachings and interviews",summary:"A news item about a Buddhist leader would summarise the reported remarks, identify the publisher and separate the journalist's framing from direct quotations. This is an illustrative entry, not a current news story.",date:"Demo example",topic:"Teaching · Interviews",source:"The Office of His Holiness the Dalai Lama",url:"https://www.dalailama.com/",icon:"☸"},
+{id:3,figure:"azhar",tradition:"Islam",subTradition:"Sunni",type:"Official statement",title:"Tracking statements on interfaith dialogue and public life",summary:"Official institutional announcements can help readers follow public positions on dialogue, education and social issues. A live version would quote or summarise a specific statement and preserve its original date and wording.",date:"Demo example",topic:"Dialogue · Public life",source:"Al-Azhar",url:"https://www.azhar.eg/",icon:"☾"},
+{id:4,figure:"chief-rabbi",tradition:"Judaism",subTradition:"Orthodox",type:"News coverage",title:"Following official religious announcements with source context",summary:"Coverage would identify whether a story comes from an official religious body or an independent newsroom, and link to the original announcement whenever possible. This sample does not describe a specific event.",date:"Demo example",topic:"Institutions · Announcements",source:"Chief Rabbinate of Israel",url:"https://www.gov.il/en/departments/chief_rabbinate_of_israel/govil-landing-page",icon:"✡"},
+{id:5,figure:"shankaracharya",tradition:"Hinduism",subTradition:"Advaita Vedanta / Smartism",type:"Speech",title:"Bringing public teachings and speeches into one feed",summary:"The platform could surface published speeches, public lectures and institutional updates, with a concise explanation of the subject and a source link. This is a product example, not a statement attributed to a specific individual.",date:"Demo example",topic:"Speeches · Teachings",source:"Background reference",url:"https://www.britannica.com/topic/Shankaracharya",icon:"ॐ"},
+{id:6,figure:"akal",tradition:"Sikhism",subTradition:"Sikh institutions",type:"Official statement",title:"A dedicated place for Sikh institutional updates",summary:"A live feed could collect public notices and statements from Sikh institutions, clearly noting the issuing body, publication date and original page. This placeholder is not a current Akal Takht announcement.",date:"Demo example",topic:"Sikh institutions · Public notices",source:"Shiromani Gurdwara Parbandhak Committee",url:"https://sgpc.net/",icon:"☬"},
+{id:7,figure:"welby",tradition:"Christianity",subTradition:"Anglican / Church of England",type:"Social post",title:"How public social posts will be attributed",summary:"When a leader posts publicly on a supported social platform, the feed would show the account name, post time and a link to the original post. No social account has been connected in this prototype.",date:"Demo example",topic:"Social media · Attribution",source:"Church of England",url:"https://www.churchofengland.org/media",icon:"✝"},
+{id:8,figure:"ecumenical",tradition:"Christianity",subTradition:"Eastern Orthodox",type:"Official statement",title:"Adding Orthodox Christian statements to multi-faith coverage",summary:"The same editorial format would apply across traditions: a concise summary, clear attribution, publication date and a source link, without treating any single institution as representative of every believer.",date:"Demo example",topic:"Orthodox Christianity · Statements",source:"Ecumenical Patriarchate",url:"https://www.patriarchate.org/",icon:"✝"}
 ];
-let religion="All traditions",type="all",query="";
+let religion="All traditions",subTradition="all",type="all",query="";
+const subTraditions={
+  "Christianity":["Catholic","Anglican / Church of England","Eastern Orthodox","Oriental Orthodox","Baptist","Methodist","Pentecostal","Lutheran","Presbyterian / Reformed","Evangelical","Other Christian"],
+  "Islam":["Sunni","Shia","Sufi traditions","Ahmadiyya","Islamic institutions","Other Muslim traditions"],
+  "Judaism":["Orthodox","Conservative / Masorti","Reform / Progressive","Reconstructionist","Other Jewish traditions"],
+  "Hinduism":["Vaishnavism","Shaivism","Shaktism","Smartism","Advaita Vedanta","Other Hindu traditions"],
+  "Buddhism":["Theravada","Mahayana","Vajrayana","Zen","Pure Land","Other Buddhist traditions"],
+  "Sikhism":["Sikh institutions","Gurdwaras and community organisations","Sikh scholars and educators","Other Sikh sources"]
+};
+function renderSubTraditionOptions(){
+  const select=$("subTraditionFilter");
+  if(religion==="All traditions"){
+    select.innerHTML='<option value="all">Select a main tradition first</option>';
+    select.disabled=true;
+    subTradition="all";
+    return;
+  }
+  const options=subTraditions[religion]||[];
+  select.disabled=false;
+  select.innerHTML='<option value="all">All '+religion+' branches</option>'+options.map(label=>'<option value="'+label.replace(/&/g,"&amp;").replace(/"/g,"&quot;")+'">'+label+'</option>').join("");
+  if(!options.includes(subTradition))subTradition="all";
+  select.value=subTradition;
+}
 const validViews=["all","following","saved"];
 function readStoredValue(key, fallback) {
   try {
@@ -94,7 +116,7 @@ function findRelatedFigures(story, sourceName="") {
 let liveFeedStatus="Connecting to configured sources…", liveFeedLoading=false, lastLiveRefresh=null;
 const $=id=>document.getElementById(id);
 function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window._toast);window._toast=setTimeout(()=>t.classList.remove("show"),2400)}
-function currentStories(){return stories.filter(s=>(religion==="All traditions"||s.tradition===religion)&&(type==="all"||s.type===type)&&(view!=="following"||((s.figureIds||[s.figure]).some(id=>followed.has(id))))&&(view!=="saved"||saved.has(s.id))&&(!query||[s.title,s.summary,s.source,s.topic,s.tradition,figures.find(f=>f.id===s.figure)?.name].join(" ").toLowerCase().includes(query.toLowerCase())))}
+function currentStories(){return stories.filter(s=>(religion==="All traditions"||s.tradition===religion)&&(subTradition==="all"||s.subTradition===subTradition)&&(type==="all"||s.type===type)&&(view!=="following"||((s.figureIds||[s.figure]).some(id=>followed.has(id))))&&(view!=="saved"||saved.has(s.id))&&(!query||[s.title,s.summary,s.source,s.topic,s.tradition,figures.find(f=>f.id===s.figure)?.name].join(" ").toLowerCase().includes(query.toLowerCase())))}
 function renderStories(){const arr=currentStories();$("countLabel").textContent=arr.length+" "+(arr.length===1?"story":"stories");$("feedTitle").textContent=view==="saved"?"Saved stories":view==="following"?"Your following feed":"Latest updates";$("feedSubtitle").textContent=view==="saved"?"Stories you've bookmarked in this browser.":view==="following"?"Updates from figures you've chosen to follow.":liveFeedStatus;if(!arr.length){$("stories").innerHTML='<div class="empty"><strong>Nothing here just yet</strong>Try another tradition, clear your search, or save a story from Discover.</div>';return}
 $("stories").innerHTML=arr.map(s=>{const f=figures.find(f=>f.id===s.figure);return `<article class="story"><div class="story-top"><div class="avatar">${s.icon}</div><div class="who"><strong>${f.name}</strong><small>${s.tradition} · ${f.role}</small></div><span class="kind ${s.type==="News coverage"?"news":s.type==="Social post"?"social":""}">${s.type}</span></div><h3>${s.title}</h3><p>${s.summary}</p><div class="story-meta"><span>${s.date}</span><span class="dot"></span><span>${s.topic}</span></div><div class="story-actions"><a class="source" href="${s.url}" target="_blank" rel="noopener noreferrer">↗ Visit source</a><button class="action ${saved.has(s.id)?"saved":""}" data-save="${s.id}">${saved.has(s.id)?"✓ Saved":"☆ Save"}</button><button class="action" data-share="${s.id}">↗ Share</button><span class="spacer"></span><span style="font-size:10px;color:#8a948d">Original source</span></div></article>`}).join("");
 document.querySelectorAll("[data-save]").forEach(b=>b.onclick=()=>{const id=stories.find(s=>String(s.id)===b.dataset.save)?.id;if(id===undefined)return;saved.has(id)?saved.delete(id):saved.add(id);persistSet("archangel.savedStories",saved);renderStories();toast(saved.has(id)?"Story saved":"Removed from saved stories")});
@@ -102,8 +124,9 @@ document.querySelectorAll("[data-share]").forEach(b=>b.onclick=()=>{const s=stor
 }
 function renderFigures(){$("figures").innerHTML=figures.slice(0,7).map(f=>`<div class="figure"><div class="avatar">${f.icon}</div><div class="figure-info"><strong>${f.name}</strong><small>${f.tradition}</small></div><button class="follow ${followed.has(f.id)?"on":""}" data-follow="${f.id}">${followed.has(f.id)?"Following":"Follow +"}</button></div>`).join("");document.querySelectorAll("[data-follow]").forEach(b=>b.onclick=()=>{const id=b.dataset.follow;followed.has(id)?followed.delete(id):followed.add(id);persistSet("archangel.followedFigures",followed);renderFigures();renderStories();toast(followed.has(id)?"Figure followed":"Figure unfollowed")})}
 $("search").addEventListener("input",e=>{query=e.target.value;renderStories()});$("typeFilter").addEventListener("change",e=>{type=e.target.value;renderStories()});
-document.querySelectorAll("[data-religion]").forEach(b=>b.onclick=()=>{religion=b.dataset.religion;document.querySelectorAll("[data-religion]").forEach(x=>x.classList.toggle("active",x===b));renderStories()});
-document.querySelectorAll("[data-side-religion]").forEach(b=>b.onclick=()=>{religion=b.dataset.sideReligion;document.querySelectorAll("[data-religion]").forEach(x=>x.classList.toggle("active",x.dataset.religion===religion));renderStories();window.scrollTo({top:550,behavior:"smooth"})});
+document.querySelectorAll("[data-religion]").forEach(b=>b.onclick=()=>{religion=b.dataset.religion;subTradition="all";document.querySelectorAll("[data-religion]").forEach(x=>x.classList.toggle("active",x===b));renderSubTraditionOptions();renderStories()});
+$("subTraditionFilter").addEventListener("change",e=>{subTradition=e.target.value;renderStories()});
+document.querySelectorAll("[data-side-religion]").forEach(b=>b.onclick=()=>{religion=b.dataset.sideReligion;subTradition="all";document.querySelectorAll("[data-religion]").forEach(x=>x.classList.toggle("active",x.dataset.religion===religion));renderSubTraditionOptions();renderStories();window.scrollTo({top:550,behavior:"smooth"})});
 document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{
   view=b.dataset.view;
   persistValue("archangel.activeView",view);
@@ -111,6 +134,7 @@ document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{
   renderStories();
 });
 syncViewButtons();
+renderSubTraditionOptions();
 $("refresh").onclick=()=>loadLiveFeed(true);
 $("howBtn").onclick=()=>alert("Archangel brings together public updates from configured institutional and news sources. Each card links to the original publisher. Source coverage is not exhaustive, and no single institution represents every member of a religious tradition. Follow and saved-story preferences are saved in this browser on this device. Following only includes stories that can be matched to a followed figure by name or configured source; some stories may not yet be linked to a figure.");
 renderFigures();renderStories();
@@ -134,7 +158,7 @@ async function loadLiveFeed(manual = false) {
   try {
     const client = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
     const { data, error } = await client.from("stories")
-      .select("id,title,summary,story_url,published_at,tradition,content_type,summary_is_ai,source_id,sources(name)")
+      .select("id,title,summary,story_url,published_at,tradition,content_type,summary_is_ai,source_id,sources(name,sub_tradition)")
       .order("published_at", { ascending: false, nullsFirst: false }).limit(100);
     if (error) throw error;
     if (!data || !data.length) {
@@ -150,7 +174,7 @@ async function loadLiveFeed(manual = false) {
       const figureIds = findRelatedFigures(storyForMatching, src?.name || "");
       const displayFigure = figures.find(f => figureIds.includes(f.id)) || traditionFigure;
       return {
-        id: s.id, figure: displayFigure.id, figureIds, tradition: s.tradition || displayFigure.tradition,
+        id: s.id, figure: displayFigure.id, figureIds, tradition: s.tradition || displayFigure.tradition, subTradition: src?.sub_tradition || "Unclassified",
         type: s.content_type || "News coverage", title: s.title || "Untitled update",
         summary: s.summary || "No summary available yet.",
         date: s.published_at ? new Date(s.published_at).toLocaleString() : "Date not provided",
