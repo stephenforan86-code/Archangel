@@ -77,38 +77,73 @@ renderFigures();renderStories();
 // If public Supabase configuration is supplied in public/config.js, load live
 // stories from the database. The anon key is intended for browser use; RLS
 // must remain enabled and no service-role/API secrets belong in this file.
-(async function loadLiveFeed(){
+async function loadLiveFeed() {
   const cfg = window.ARCHANGEL_CONFIG || {};
-  if (!cfg.supabaseUrl || !cfg.supabaseAnonKey || !window.supabase) return;
+
+  if (!cfg.supabaseUrl || !cfg.supabaseAnonKey || !window.supabase) {
+    $("feedSubtitle").textContent = "Supabase configuration or library is missing.";
+    return;
+  }
+
+  $("feedSubtitle").textContent = "Loading live stories…";
+
   try {
-    const client = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
-    const { data, error } = await client.from("stories")
+    const client = window.supabase.createClient(
+      cfg.supabaseUrl,
+      cfg.supabaseAnonKey
+    );
+
+    const { data, error } = await client
+      .from("stories")
       .select("id,title,summary,story_url,published_at,tradition,content_type,summary_is_ai,source_id,sources(name)")
-      .order("published_at", { ascending: false, nullsFirst: false }).limit(100);
+      .order("published_at", { ascending: false, nullsFirst: false })
+      .limit(100);
+
     if (error) throw error;
+
     if (!data || !data.length) {
-      $("feedSubtitle").textContent = "Database connected. No stories have been ingested yet.";
+      $("feedSubtitle").textContent = "Connected, but no stories were found.";
       return;
     }
-    stories.splice(0, stories.length, ...data.map((s, i) => {
+
+    stories.splice(0, stories.length, ...data.map(s => {
       const src = Array.isArray(s.sources) ? s.sources[0] : s.sources;
       const fig = figures.find(f => f.tradition === s.tradition) || figures[0];
-      const dt = s.published_at ? new Date(s.published_at).toLocaleString() : "Date not provided";
+
       return {
-        id: s.id, figure: fig.id, tradition: s.tradition || fig.tradition,
-        type: s.content_type || "News coverage", title: s.title,
+        id: s.id,
+        figure: fig.id,
+        tradition: s.tradition || fig.tradition,
+        type: s.content_type || "News coverage",
+        title: s.title || "Untitled update",
         summary: s.summary || "No summary available yet.",
-        date: dt, topic: s.summary_is_ai ? "AI-assisted summary" : "Source excerpt",
-        source: src?.name || "Original source", url: s.story_url, icon: fig.icon
+        date: s.published_at
+          ? new Date(s.published_at).toLocaleString()
+          : "Date not provided",
+        topic: s.summary_is_ai ? "AI-assisted summary" : "Source excerpt",
+        source: src?.name || "Original source",
+        url: s.story_url,
+        icon: fig.icon
       };
     }));
-    $("feedSubtitle").textContent = "Live stories from configured RSS sources. Summaries link back to original publications.";
+
+    $("feedSubtitle").textContent =
+      "Live stories from configured RSS sources. Summaries link back to original publications.";
+
     const note = document.querySelector(".demo-note");
-    if (note) note.innerHTML = '<span class="live-dot"></span><strong>Database connected:</strong> displaying ingested stories from configured sources.';
+    if (note) {
+      note.innerHTML =
+        '<span class="live-dot"></span><strong>Database connected:</strong> displaying ingested stories from configured sources.';
+    }
+
     renderStories();
   } catch (err) {
-    console.error("Archangel live feed could not load:", err);
-    $("feedSubtitle").textContent = "Showing demo examples. Live database connection could not be loaded.";
+    console.error("Archangel live feed error:", err);
+    $("feedSubtitle").textContent =
+      "Live feed error: " + (err.message || String(err));
   }
-})();
+}
+
+$("refresh").onclick = loadLiveFeed;
+loadLiveFeed();
 </script></body></html>
