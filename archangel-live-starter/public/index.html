@@ -101,7 +101,7 @@ function readStoredSet(key, fallback=[]) {
   try { const value=JSON.parse(localStorage.getItem(key)||"null"); return new Set(Array.isArray(value)?value:fallback); }
   catch { return new Set(fallback); }
 }
-let followed=readStoredSet("archangel.followedFigures",["pope","sarah-mullally"]);
+let followed = readStoredSet("archangel.followedFigures", ["pope", "sarah-mullally"]);
 followed = new Set([...followed].filter(id => figures.some(f => f.id === id)));
 let saved=readStoredSet("archangel.savedStories",[]);
 function persistSet(key, value) {
