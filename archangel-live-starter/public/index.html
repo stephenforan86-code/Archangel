@@ -101,7 +101,8 @@ function readStoredSet(key, fallback=[]) {
   try { const value=JSON.parse(localStorage.getItem(key)||"null"); return new Set(Array.isArray(value)?value:fallback); }
   catch { return new Set(fallback); }
 }
-let followed=readStoredSet("archangel.followedFigures",["pope","sarah-mullally"]);\nfollowed = new Set([...followed].filter(id => figures.some(f => f.id === id)));
+let followed=readStoredSet("archangel.followedFigures",["pope","sarah-mullally"]);
+followed = new Set([...followed].filter(id => figures.some(f => f.id === id)));
 let saved=readStoredSet("archangel.savedStories",[]);
 function persistSet(key, value) {
   try { localStorage.setItem(key, JSON.stringify([...value])); }
@@ -118,12 +119,12 @@ function findRelatedFigures(story, sourceName="") {
 
   return figures.filter(f => {
     if (f.id === "pope") {
-      const explicitMention = /\\b(pope leo xiv|leo xiv|pope leo|robert prevost)\\b/i.test(text);
+      const explicitMention = /\b(pope leo xiv|leo xiv|pope leo|robert prevost)\b/i.test(text);
       const officialFeed = source === "holy see press office — english bulletin";
       return explicitMention || officialFeed;
     }
     if (f.id === "sarah-mullally") {
-      const explicitMention = /\\b(sarah mullally|archbishop sarah|archbishop of canterbury|dame sarah mullally)\\b/i.test(text);
+      const explicitMention = /\b(sarah mullally|archbishop sarah|archbishop of canterbury|dame sarah mullally)\b/i.test(text);
       const officialFeed = source === "archbishop of canterbury — news and statements" ||
                            source === "archbishop of canterbury";
       return explicitMention || officialFeed;
