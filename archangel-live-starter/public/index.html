@@ -5,9 +5,9 @@
 <meta name="theme-color" content="#17251f">
 <title>Archangel — Public voices. Original sources.</title>
 <style>
-:root{--ink:#17251f;--muted:#68736d;--paper:#f5f6f1;--card:#fff;--line:#e2e7df;--sage:#dce8d8;--accent:#2d5b48;--gold:#c49a53;--shadow:0 12px 36px #17251f0b}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit}.app{min-height:100vh}.topbar{background:var(--ink);color:#fff;padding:18px max(22px,calc((100vw - 1260px)/2));display:flex;align-items:center;gap:22px;position:sticky;top:0;z-index:5}.brand{display:flex;align-items:center;gap:11px;text-decoration:none;min-width:225px}.brandmark{width:40px;height:40px;border-radius:13px;background:#d7e5d2;color:var(--ink);display:grid;place-items:center;font-size:21px}.brand strong{display:block;font-size:19px;letter-spacing:-.5px}.brand small{display:block;color:#bdc9c0;font-size:11px;letter-spacing:.5px}.toplinks{display:flex;gap:8px;margin-left:auto}.toplinks button{border:0;background:transparent;color:#dce4dd;padding:10px 13px;border-radius:10px}.toplinks button.active,.toplinks button:hover{background:#314239;color:white}.profile-btn{border:1px solid #53645a;border-radius:99px;background:transparent;color:white;padding:9px 14px;white-space:nowrap}.hero{background:linear-gradient(115deg,#e6eee1,#f5f6f1 68%);padding:38px 24px 30px}.hero-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:1.4fr .8fr;gap:28px;align-items:center}.eyebrow{color:var(--accent);font-size:11px;letter-spacing:1.7px;font-weight:800;text-transform:uppercase}.hero h1{font-size:clamp(32px,4vw,49px);line-height:1.07;letter-spacing:-2px;margin:10px 0 14px;max-width:620px}.hero p{max-width:650px;color:#526159;font-size:16px;margin:0}.hero-card{background:#fff;border:1px solid #dce5d9;border-radius:18px;padding:20px;box-shadow:var(--shadow)}.hero-card .number{font-size:32px;font-weight:750;letter-spacing:-1px}.hero-card .caption{color:var(--muted);font-size:12px}.hero-stat{display:flex;justify-content:space-between;gap:12px;align-items:center}.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#d29b4b;margin-right:7px}.demo-note{font-size:11px;color:#6b746e;background:#f7f4eb;border:1px solid #e9dfc8;padding:9px 11px;border-radius:9px;margin-top:14px}
-main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}.searchbox{flex:1;min-width:220px;position:relative}.searchbox span{position:absolute;left:14px;top:10px;color:#718078;font-size:18px}.searchbox input{width:100%;padding:12px 14px 12px 42px;border:1px solid var(--line);border-radius:12px;background:#fff;outline:none}.searchbox input:focus{border-color:#72947e;box-shadow:0 0 0 3px #dce8d8}.select{border:1px solid var(--line);background:white;border-radius:12px;padding:12px 13px;color:#34463b}.refresh{border:0;background:var(--accent);color:white;border-radius:12px;padding:12px 16px;font-weight:650}.refresh:hover{background:#234936}.tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 15px;border-bottom:1px solid var(--line);margin-bottom:20px}.tab{border:1px solid transparent;background:transparent;color:#637068;padding:8px 13px;border-radius:99px;white-space:nowrap;font-size:13px}.tab.active{background:var(--ink);color:white}.layout{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:24px;align-items:start}.feed-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:14px;gap:12px}.feed-head h2{font-size:21px;letter-spacing:-.6px;margin:0}.feed-head p{font-size:12px;color:var(--muted);margin:3px 0 0}.sort{font-size:12px;color:var(--muted)}.stories{display:grid;gap:14px}.story{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:19px 20px;box-shadow:var(--shadow);transition:transform .15s}.story:hover{transform:translateY(-1px)}.story-top{display:flex;align-items:center;gap:10px}.avatar{width:43px;height:43px;border-radius:13px;background:#e6eee1;color:#315541;display:grid;place-items:center;font-size:20px;flex-shrink:0}.who{min-width:0;flex:1}.who strong{font-size:13px;display:block}.who small{display:block;color:var(--muted);font-size:11px}.kind{font-size:10px;text-transform:uppercase;letter-spacing:.8px;border-radius:6px;padding:5px 7px;background:#edf2ea;color:#3c6148;font-weight:800;white-space:nowrap}.kind.news{background:#f4ecdc;color:#8b672c}.kind.social{background:#e8eef9;color:#375b91}.story h3{font-size:19px;line-height:1.3;letter-spacing:-.45px;margin:16px 0 8px}.story p{margin:0;color:#56635b;font-size:14px;line-height:1.65}.story-meta{display:flex;gap:8px;align-items:center;color:#849087;font-size:11px;margin-top:13px;flex-wrap:wrap}.story-meta .dot{width:3px;height:3px;background:#aab4ac;border-radius:50%}.story-actions{border-top:1px solid #eef0eb;margin-top:16px;padding-top:13px;display:flex;align-items:center;gap:8px}.source{display:inline-flex;align-items:center;gap:7px;text-decoration:none;background:var(--accent);color:white;padding:9px 12px;border-radius:9px;font-size:12px;font-weight:700}.source:hover{background:#234936}.action{border:1px solid var(--line);background:white;color:#59665e;padding:8px 10px;border-radius:9px;font-size:12px}.action.saved{background:#edf4e9;border-color:#b9d0b8;color:#28573c}.story-actions .spacer{flex:1}.sidebar{display:grid;gap:15px}.sidecard{background:white;border:1px solid var(--line);border-radius:15px;padding:18px}.sidecard h3{font-size:15px;margin:0 0 13px;letter-spacing:-.3px}.sidecard p{font-size:12px;color:var(--muted);margin:0 0 12px}.figure-list{display:grid;gap:13px}.figure{display:flex;align-items:center;gap:10px}.figure .avatar{width:37px;height:37px;font-size:17px}.figure-info{flex:1;min-width:0}.figure-info strong{display:block;font-size:12px}.figure-info small{display:block;color:var(--muted);font-size:10px}.follow{border:1px solid var(--line);border-radius:8px;background:white;padding:5px 8px;font-size:11px;color:#506056}.follow.on{background:#eaf2e7;color:#2e6242;border-color:#c9dcc6}.religion-list{display:flex;flex-wrap:wrap;gap:7px}.religion-pill{font-size:11px;border:1px solid var(--line);padding:6px 9px;border-radius:99px;color:#58665d;background:#fff}.religion-pill span{color:#9aa59d;margin-left:4px}.source-rule{display:flex;gap:9px;margin-top:11px}.source-rule b{font-size:12px;display:block}.source-rule small{font-size:11px;color:var(--muted);display:block}.empty{padding:45px 20px;text-align:center;background:#fff;border:1px dashed #cdd7cc;border-radius:15px;color:var(--muted)}.empty strong{display:block;color:var(--ink);font-size:17px;margin-bottom:5px}.footer{border-top:1px solid var(--line);padding:24px;text-align:center;color:#7b877e;font-size:11px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#17251f;color:white;padding:11px 16px;border-radius:11px;box-shadow:var(--shadow);font-size:13px;z-index:9;opacity:0;pointer-events:none;transition:opacity .2s}.toast.show{opacity:1}
+:root{--ink:#252747;--muted:#6d7187;--paper:#f6f2e9;--card:#fffdf8;--line:#e5dfd2;--sage:#e7e5f1;--accent:#454a83;--gold:#c6a15b;--shadow:0 12px 36px #25274712}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit}.app{min-height:100vh}.topbar{background:var(--ink);color:#fff;padding:18px max(22px,calc((100vw - 1260px)/2));display:flex;align-items:center;gap:22px;position:sticky;top:0;z-index:5}.brand{display:flex;align-items:center;gap:11px;text-decoration:none;min-width:225px}.brandmark{width:40px;height:40px;border-radius:13px;background:#f0e6cb;color:var(--ink);display:grid;place-items:center;font-size:21px}.brand strong{display:block;font-size:19px;letter-spacing:-.5px}.brand small{display:block;color:#d7d6e6;font-size:11px;letter-spacing:.5px}.toplinks{display:flex;gap:8px;margin-left:auto}.toplinks button{border:0;background:transparent;color:#dce4dd;padding:10px 13px;border-radius:10px}.toplinks button.active,.toplinks button:hover{background:#393d69;color:white}.profile-btn{border:1px solid #6f7190;border-radius:99px;background:transparent;color:white;padding:9px 14px;white-space:nowrap}.hero{background:linear-gradient(115deg,#e8e7f2,#f6f2e9 68%);padding:38px 24px 30px}.hero-inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:1.4fr .8fr;gap:28px;align-items:center}.eyebrow{color:var(--accent);font-size:11px;letter-spacing:1.7px;font-weight:800;text-transform:uppercase}.hero h1{font-size:clamp(32px,4vw,49px);line-height:1.07;letter-spacing:-2px;margin:10px 0 14px;max-width:620px}.hero p{max-width:650px;color:#526159;font-size:16px;margin:0}.hero-card{background:#fff;border:1px solid #e2dcec;border-radius:18px;padding:20px;box-shadow:var(--shadow)}.hero-card .number{font-size:32px;font-weight:750;letter-spacing:-1px}.hero-card .caption{color:var(--muted);font-size:12px}.hero-stat{display:flex;justify-content:space-between;gap:12px;align-items:center}.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#d29b4b;margin-right:7px}.demo-note{font-size:11px;color:#6b746e;background:#f7f0df;border:1px solid #e8d9b8;padding:9px 11px;border-radius:9px;margin-top:14px}
+main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}.searchbox{flex:1;min-width:220px;position:relative}.searchbox span{position:absolute;left:14px;top:10px;color:#718078;font-size:18px}.searchbox input{width:100%;padding:12px 14px 12px 42px;border:1px solid var(--line);border-radius:12px;background:#fff;outline:none}.searchbox input:focus{border-color:#c6a15b;box-shadow:0 0 0 3px #f2e6c9}.select{border:1px solid var(--line);background:white;border-radius:12px;padding:12px 13px;color:#393b60}.refresh{border:0;background:var(--accent);color:white;border-radius:12px;padding:12px 16px;font-weight:650}.refresh:hover{background:#33375f}.tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 15px;border-bottom:1px solid var(--line);margin-bottom:20px}.tab{border:1px solid transparent;background:transparent;color:#637068;padding:8px 13px;border-radius:99px;white-space:nowrap;font-size:13px}.tab.active{background:var(--ink);color:white}.layout{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:24px;align-items:start}.feed-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:14px;gap:12px}.feed-head h2{font-size:21px;letter-spacing:-.6px;margin:0}.feed-head p{font-size:12px;color:var(--muted);margin:3px 0 0}.sort{font-size:12px;color:var(--muted)}.stories{display:grid;gap:14px}.story{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:19px 20px;box-shadow:var(--shadow);transition:transform .15s}.story:hover{transform:translateY(-1px)}.story-top{display:flex;align-items:center;gap:10px}.avatar{width:43px;height:43px;border-radius:13px;background:#e8e6f2;color:#353a70;display:grid;place-items:center;font-size:20px;flex-shrink:0}.who{min-width:0;flex:1}.who strong{font-size:13px;display:block}.who small{display:block;color:var(--muted);font-size:11px}.kind{font-size:10px;text-transform:uppercase;letter-spacing:.8px;border-radius:6px;padding:5px 7px;background:#e9e8f4;color:#3d427b;font-weight:800;white-space:nowrap}.kind.news{background:#f5ecd8;color:#88652c}.kind.social{background:#e9eafa;color:#454a83}.story h3{font-size:19px;line-height:1.3;letter-spacing:-.45px;margin:16px 0 8px}.story p{margin:0;color:#56635b;font-size:14px;line-height:1.65}.story-meta{display:flex;gap:8px;align-items:center;color:#849087;font-size:11px;margin-top:13px;flex-wrap:wrap}.story-meta .dot{width:3px;height:3px;background:#aab4ac;border-radius:50%}.story-actions{border-top:1px solid #eef0eb;margin-top:16px;padding-top:13px;display:flex;align-items:center;gap:8px}.source{display:inline-flex;align-items:center;gap:7px;text-decoration:none;background:var(--accent);color:white;padding:9px 12px;border-radius:9px;font-size:12px;font-weight:700}.source:hover{background:#33375f}.action{border:1px solid var(--line);background:white;color:#59665e;padding:8px 10px;border-radius:9px;font-size:12px}.action.saved{background:#f5ecd8;border-color:#d9c18d;color:#6d511d}.story-actions .spacer{flex:1}.sidebar{display:grid;gap:15px}.sidecard{background:white;border:1px solid var(--line);border-radius:15px;padding:18px}.sidecard h3{font-size:15px;margin:0 0 13px;letter-spacing:-.3px}.sidecard p{font-size:12px;color:var(--muted);margin:0 0 12px}.figure-list{display:grid;gap:13px}.figure{display:flex;align-items:center;gap:10px}.figure .avatar{width:37px;height:37px;font-size:17px}.figure-info{flex:1;min-width:0}.figure-info strong{display:block;font-size:12px}.figure-info small{display:block;color:var(--muted);font-size:10px}.follow{border:1px solid var(--line);border-radius:8px;background:white;padding:5px 8px;font-size:11px;color:#506056}.follow.on{background:#f5ecd8;color:#6d511d;border-color:#e0ca9a}.religion-list{display:flex;flex-wrap:wrap;gap:7px}.religion-pill{font-size:11px;border:1px solid var(--line);padding:6px 9px;border-radius:99px;color:#58665d;background:#fff}.religion-pill span{color:#9aa59d;margin-left:4px}.source-rule{display:flex;gap:9px;margin-top:11px}.source-rule b{font-size:12px;display:block}.source-rule small{font-size:11px;color:var(--muted);display:block}.empty{padding:45px 20px;text-align:center;background:#fffdf8;border:1px dashed #d8d1e4;border-radius:15px;color:var(--muted)}.empty strong{display:block;color:var(--ink);font-size:17px;margin-bottom:5px}.footer{border-top:1px solid var(--line);padding:24px;text-align:center;color:#777b8f;font-size:11px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#252747;color:white;padding:11px 16px;border-radius:11px;box-shadow:var(--shadow);font-size:13px;z-index:9;opacity:0;pointer-events:none;transition:opacity .2s}.toast.show{opacity:1}
 @media(max-width:850px){.hero-inner{grid-template-columns:1fr}.hero-card{max-width:none}.layout{grid-template-columns:1fr}.sidebar{grid-template-columns:repeat(2,minmax(0,1fr))}.toplinks{display:none}.brand{min-width:0}.profile-btn{margin-left:auto}.hero{padding-top:28px}}
 @media(max-width:560px){.topbar{padding:12px 16px}.brand strong{font-size:17px}.brand small{font-size:9px}.brandmark{width:36px;height:36px}.profile-btn{font-size:11px;padding:8px 10px}.hero{padding:27px 18px 22px}.hero h1{letter-spacing:-1.3px}.hero-card{padding:15px}.hero-stat .number{font-size:27px}main{padding:0 14px 40px;margin-top:20px}.toolbar{gap:8px}.searchbox{flex-basis:100%}.select{flex:1;min-width:0}.refresh{padding:12px}.story{padding:15px}.story h3{font-size:17px}.kind{font-size:9px}.story-actions{flex-wrap:wrap}.story-actions .spacer{display:none}.sidebar{grid-template-columns:1fr}.feed-head{align-items:start;flex-direction:column}}
 </style>
@@ -16,22 +16,22 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
 <header class="topbar">
 <a class="brand" href="#" aria-label="Archangel home"><div class="brandmark">✳</div><div><strong>Archangel</strong><small>PUBLIC VOICES. ORIGINAL SOURCES.</small></div></a>
 <nav class="toplinks"><button class="active" data-view="all">Discover</button><button data-view="following">Following</button><button data-view="saved">Saved stories</button></nav>
-<button class="profile-btn" id="howBtn">About this demo ↗</button>
+<button class="profile-btn" id="howBtn">About Archangel ↗</button>
 </header>
 <section class="hero"><div class="hero-inner">
 <div><div class="eyebrow">A clearer view of faith and public life</div><h1>What the world's religious leaders are saying.</h1><p>Official statements, public posts and news coverage from across religious traditions — brought together with concise summaries and links to the source.</p></div>
-<div class="hero-card"><div class="hero-stat"><div><div class="caption">COVERAGE IN THIS PROTOTYPE</div><div class="number">6 traditions</div></div><div style="font-size:29px">🌍</div></div><div class="hero-stat" style="margin-top:12px"><div><div class="caption">FIGURES TO EXPLORE</div><div class="number">8 profiles</div></div><div style="font-size:26px">🕊️</div></div><div class="demo-note"><span class="live-dot"></span><strong>Prototype mode:</strong> stories below are illustrative examples. Live collection is not connected yet.</div></div>
+<div class="hero-card"><div class="hero-stat"><div><div class="caption">TRADITIONS COVERED</div><div class="number">6 traditions</div></div><div style="font-size:29px">🌍</div></div><div class="hero-stat" style="margin-top:12px"><div><div class="caption">FIGURES TO EXPLORE</div><div class="number">8 profiles</div></div><div style="font-size:26px">🕊️</div></div><div class="demo-note"><span class="live-dot"></span><strong>Connecting to the live feed:</strong> loading stories from configured sources.</div></div>
 </div></section>
 <main>
 <div class="toolbar"><label class="searchbox"><span>⌕</span><input id="search" type="search" placeholder="Search people, topics, statements…"></label><select class="select" id="typeFilter" aria-label="Filter by content type"><option value="all">All content types</option><option value="Official statement">Official statements</option><option value="News coverage">News coverage</option><option value="Social post">Social posts</option><option value="Speech">Speeches</option></select><button class="refresh" id="refresh">↻ Refresh feed</button></div>
 <div class="tabs" id="religionTabs"><button class="tab active" data-religion="All traditions">All traditions</button><button class="tab" data-religion="Christianity">✳ Christianity</button><button class="tab" data-religion="Islam">☾ Islam</button><button class="tab" data-religion="Judaism">✡ Judaism</button><button class="tab" data-religion="Hinduism">ॐ Hinduism</button><button class="tab" data-religion="Buddhism">☸ Buddhism</button><button class="tab" data-religion="Sikhism">☬ Sikhism</button></div>
-<div class="layout"><section><div class="feed-head"><div><h2 id="feedTitle">Latest updates</h2><p id="feedSubtitle">A sample of the kinds of updates Archangel will bring together.</p></div><div class="sort" id="countLabel">6 stories</div></div><div class="stories" id="stories"></div></section>
+<div class="layout"><section><div class="feed-head"><div><h2 id="feedTitle">Latest updates</h2><p id="feedSubtitle">Connecting to configured sources…</p></div><div class="sort" id="countLabel">6 stories</div></div><div class="stories" id="stories"></div></section>
 <aside class="sidebar">
 <div class="sidecard"><h3>Figures to follow</h3><p>Follow a figure to focus your feed on their updates.</p><div class="figure-list" id="figures"></div></div>
 <div class="sidecard"><h3>Browse traditions</h3><p>Coverage is intended to span traditions and viewpoints, without endorsing a faith or institution.</p><div class="religion-list"><button class="religion-pill" data-side-religion="Christianity">Christianity <span>2</span></button><button class="religion-pill" data-side-religion="Islam">Islam <span>1</span></button><button class="religion-pill" data-side-religion="Judaism">Judaism <span>1</span></button><button class="religion-pill" data-side-religion="Hinduism">Hinduism <span>1</span></button><button class="religion-pill" data-side-religion="Buddhism">Buddhism <span>1</span></button><button class="religion-pill" data-side-religion="Sikhism">Sikhism <span>1</span></button></div></div>
 <div class="sidecard"><h3>Our source standards</h3><div class="source-rule"><span>✓</span><div><b>Original links</b><small>Open the primary source where available.</small></div></div><div class="source-rule"><span>✓</span><div><b>Clear labels</b><small>Separate official statements from reporting.</small></div></div><div class="source-rule"><span>✓</span><div><b>Context, not spin</b><small>Summaries aim to be concise and neutral.</small></div></div></div>
 </aside></div>
-</main><footer class="footer">Archangel prototype · Illustrative sample content · Not affiliated with any religious institution · Source links lead to official or institutional websites.</footer>
+</main><footer class="footer">Archangel · Public-source updates with links to original publishers. Source affiliations and perspectives vary; see each original publication for context.</footer>
 <div class="toast" id="toast" role="status"></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./config.js"></script>
@@ -57,10 +57,11 @@ const stories=[
 {id:8,figure:"ecumenical",tradition:"Christianity",type:"Official statement",title:"Adding Orthodox Christian statements to multi-faith coverage",summary:"The same editorial format would apply across traditions: a concise summary, clear attribution, publication date and a source link, without treating any single institution as representative of every believer.",date:"Demo example",topic:"Orthodox Christianity · Statements",source:"Ecumenical Patriarchate",url:"https://www.patriarchate.org/",icon:"✝"}
 ];
 let religion="All traditions",view="all",type="all",query="",followed=new Set(["pope","dalai"]),saved=new Set();
+let liveFeedStatus="Connecting to configured sources…", liveFeedLoading=false, lastLiveRefresh=null;
 const $=id=>document.getElementById(id);
 function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window._toast);window._toast=setTimeout(()=>t.classList.remove("show"),2400)}
 function currentStories(){return stories.filter(s=>(religion==="All traditions"||s.tradition===religion)&&(type==="all"||s.type===type)&&(view!=="following"||followed.has(s.figure))&&(view!=="saved"||saved.has(s.id))&&(!query||[s.title,s.summary,s.source,s.topic,s.tradition,figures.find(f=>f.id===s.figure)?.name].join(" ").toLowerCase().includes(query.toLowerCase())))}
-function renderStories(){const arr=currentStories();$("countLabel").textContent=arr.length+" "+(arr.length===1?"story":"stories");$("feedTitle").textContent=view==="saved"?"Saved stories":view==="following"?"Your following feed":"Latest updates";$("feedSubtitle").textContent=view==="saved"?"Stories you've bookmarked in this browser.":view==="following"?"Updates from figures you've chosen to follow.":"Recent updates from configured sources across religious traditions.";if(!arr.length){$("stories").innerHTML='<div class="empty"><strong>Nothing here just yet</strong>Try another tradition, clear your search, or save a story from Discover.</div>';return}
+function renderStories(){const arr=currentStories();$("countLabel").textContent=arr.length+" "+(arr.length===1?"story":"stories");$("feedTitle").textContent=view==="saved"?"Saved stories":view==="following"?"Your following feed":"Latest updates";$("feedSubtitle").textContent=view==="saved"?"Stories you've bookmarked in this browser.":view==="following"?"Updates from figures you've chosen to follow.":liveFeedStatus;if(!arr.length){$("stories").innerHTML='<div class="empty"><strong>Nothing here just yet</strong>Try another tradition, clear your search, or save a story from Discover.</div>';return}
 $("stories").innerHTML=arr.map(s=>{const f=figures.find(f=>f.id===s.figure);return `<article class="story"><div class="story-top"><div class="avatar">${s.icon}</div><div class="who"><strong>${f.name}</strong><small>${s.tradition} · ${f.role}</small></div><span class="kind ${s.type==="News coverage"?"news":s.type==="Social post"?"social":""}">${s.type}</span></div><h3>${s.title}</h3><p>${s.summary}</p><div class="story-meta"><span>${s.date}</span><span class="dot"></span><span>${s.topic}</span></div><div class="story-actions"><a class="source" href="${s.url}" target="_blank" rel="noopener noreferrer">↗ Visit source</a><button class="action ${saved.has(s.id)?"saved":""}" data-save="${s.id}">${saved.has(s.id)?"✓ Saved":"☆ Save"}</button><button class="action" data-share="${s.id}">↗ Share</button><span class="spacer"></span><span style="font-size:10px;color:#8a948d">Original source</span></div></article>`}).join("");
 document.querySelectorAll("[data-save]").forEach(b=>b.onclick=()=>{const id=stories.find(s=>String(s.id)===b.dataset.save)?.id;if(id===undefined)return;saved.has(id)?saved.delete(id):saved.add(id);renderStories();toast(saved.has(id)?"Story saved":"Removed from saved stories")});
 document.querySelectorAll("[data-share]").forEach(b=>b.onclick=()=>{const s=stories.find(x=>String(x.id)===b.dataset.share);const text=`${s.title}\n${s.url}`;if(navigator.share)navigator.share({title:s.title,url:s.url}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>toast("Source link copied")).catch(()=>toast(text));else toast(s.url)});
@@ -70,80 +71,75 @@ $("search").addEventListener("input",e=>{query=e.target.value;renderStories()});
 document.querySelectorAll("[data-religion]").forEach(b=>b.onclick=()=>{religion=b.dataset.religion;document.querySelectorAll("[data-religion]").forEach(x=>x.classList.toggle("active",x===b));renderStories()});
 document.querySelectorAll("[data-side-religion]").forEach(b=>b.onclick=()=>{religion=b.dataset.sideReligion;document.querySelectorAll("[data-religion]").forEach(x=>x.classList.toggle("active",x.dataset.religion===religion));renderStories();window.scrollTo({top:550,behavior:"smooth"})});
 document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{view=b.dataset.view;document.querySelectorAll("[data-view]").forEach(x=>x.classList.toggle("active",x===b));renderStories()});
-$("refresh").onclick=()=>{renderStories();toast("Prototype refreshed. Live source collection is not connected yet.")};
-$("howBtn").onclick=()=>alert("Archangel is a front-end prototype. Search, filters, follow controls, bookmarks and sharing are interactive and stored for this session only. The stories are illustrative placeholders, not current news. Live feeds, user accounts, backend storage, automated summaries and push notifications still need to be connected.");
+$("refresh").onclick=()=>loadLiveFeed(true);
+$("howBtn").onclick=()=>alert("Archangel brings together public updates from configured institutional and news sources. Each card links to the original publisher. Source coverage is not exhaustive, and no single institution represents every member of a religious tradition. Follow and saved-story preferences are currently held in this browser session.");
 renderFigures();renderStories();
 
 // If public Supabase configuration is supplied in public/config.js, load live
 // stories from the database. The anon key is intended for browser use; RLS
 // must remain enabled and no service-role/API secrets belong in this file.
-async function loadLiveFeed() {
+async function loadLiveFeed(manual = false) {
   const cfg = window.ARCHANGEL_CONFIG || {};
-
+  if (liveFeedLoading) return;
   if (!cfg.supabaseUrl || !cfg.supabaseAnonKey || !window.supabase) {
-    $("feedSubtitle").textContent = "Supabase configuration or library is missing.";
+    liveFeedStatus = "Live feed configuration or library is unavailable.";
+    renderStories();
     return;
   }
-
-  $("feedSubtitle").textContent = "Loading live stories…";
-
+  liveFeedLoading = true;
+  if (manual) {
+    $("feedSubtitle").textContent = "Refreshing live stories…";
+    $("refresh").disabled = true;
+  }
   try {
-    const client = window.supabase.createClient(
-      cfg.supabaseUrl,
-      cfg.supabaseAnonKey
-    );
-
-    const { data, error } = await client
-      .from("stories")
+    const client = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+    const { data, error } = await client.from("stories")
       .select("id,title,summary,story_url,published_at,tradition,content_type,summary_is_ai,source_id,sources(name)")
-      .order("published_at", { ascending: false, nullsFirst: false })
-      .limit(100);
-
+      .order("published_at", { ascending: false, nullsFirst: false }).limit(100);
     if (error) throw error;
-
     if (!data || !data.length) {
-      $("feedSubtitle").textContent = "Connected, but no stories were found.";
+      liveFeedStatus = "Connected, but no stories have been ingested yet.";
+      renderStories();
+      if (manual) toast("Connected, but no stories found yet");
       return;
     }
-
     stories.splice(0, stories.length, ...data.map(s => {
       const src = Array.isArray(s.sources) ? s.sources[0] : s.sources;
       const fig = figures.find(f => f.tradition === s.tradition) || figures[0];
-
       return {
-        id: s.id,
-        figure: fig.id,
-        tradition: s.tradition || fig.tradition,
-        type: s.content_type || "News coverage",
-        title: s.title || "Untitled update",
+        id: s.id, figure: fig.id, tradition: s.tradition || fig.tradition,
+        type: s.content_type || "News coverage", title: s.title || "Untitled update",
         summary: s.summary || "No summary available yet.",
-        date: s.published_at
-          ? new Date(s.published_at).toLocaleString()
-          : "Date not provided",
+        date: s.published_at ? new Date(s.published_at).toLocaleString() : "Date not provided",
         topic: s.summary_is_ai ? "AI-assisted summary" : "Source excerpt",
-        source: src?.name || "Original source",
-        url: s.story_url,
-        icon: fig.icon
+        source: src?.name || "Original source", url: s.story_url, icon: fig.icon
       };
     }));
-
-    $("feedSubtitle").textContent =
-      "Live stories from configured RSS sources. Summaries link back to original publications.";
-
+    lastLiveRefresh = new Date();
+    liveFeedStatus = "Live stories from configured sources · Updated " + lastLiveRefresh.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}) + ".";
     const note = document.querySelector(".demo-note");
-    if (note) {
-      note.innerHTML =
-        '<span class="live-dot"></span><strong>Database connected:</strong> displaying ingested stories from configured sources.';
-    }
-
+    if (note) note.innerHTML = '<span class="live-dot"></span><strong>Live feed connected:</strong> displaying stories ingested from configured sources.';
     renderStories();
+    if (manual) toast("Live feed refreshed");
   } catch (err) {
     console.error("Archangel live feed error:", err);
-    $("feedSubtitle").textContent =
-      "Live feed error: " + (err.message || String(err));
+    liveFeedStatus = "Live feed could not refresh. Showing the last available stories. Check the connection and try again.";
+    renderStories();
+    if (manual) toast("Refresh failed. See browser console for details.");
+  } finally {
+    liveFeedLoading = false;
+    $("refresh").disabled = false;
   }
 }
 
-$("refresh").onclick = loadLiveFeed;
+$("refresh").onclick = () => loadLiveFeed(true);
+renderFigures();
+renderStories();
 loadLiveFeed();
+// Refresh the database-backed feed every 3 minutes while the tab is visible.
+// The server-side importer runs separately on its own schedule.
+setInterval(() => {
+  if (document.visibilityState === "visible") loadLiveFeed(false);
+}, 3 * 60 * 1000);
+window.addEventListener("focus", () => loadLiveFeed(false));;
 </script></body></html>
