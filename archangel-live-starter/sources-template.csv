@@ -1,0 +1,5 @@
+name,tradition,source_type,feed_url,website_url,enabled
+Vatican News,Christianity,official,REPLACE_WITH_VERIFIED_RSS_URL,https://www.vaticannews.va/en.html,false
+Office of the Dalai Lama,Buddhism,official,REPLACE_WITH_VERIFIED_RSS_URL,https://www.dalailama.com/,false
+Al-Azhar,Islam,official,REPLACE_WITH_VERIFIED_RSS_URL,https://www.azhar.eg/,false
+SGPC,Sikhism,official,REPLACE_WITH_VERIFIED_RSS_URL,https://sgpc.net/,false
