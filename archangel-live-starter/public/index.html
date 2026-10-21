@@ -56,7 +56,24 @@ const stories=[
 {id:7,figure:"welby",tradition:"Christianity",type:"Social post",title:"How public social posts will be attributed",summary:"When a leader posts publicly on a supported social platform, the feed would show the account name, post time and a link to the original post. No social account has been connected in this prototype.",date:"Demo example",topic:"Social media · Attribution",source:"Church of England",url:"https://www.churchofengland.org/media",icon:"✝"},
 {id:8,figure:"ecumenical",tradition:"Christianity",type:"Official statement",title:"Adding Orthodox Christian statements to multi-faith coverage",summary:"The same editorial format would apply across traditions: a concise summary, clear attribution, publication date and a source link, without treating any single institution as representative of every believer.",date:"Demo example",topic:"Orthodox Christianity · Statements",source:"Ecumenical Patriarchate",url:"https://www.patriarchate.org/",icon:"✝"}
 ];
-let religion="All traditions",view="all",type="all",query="";
+let religion="All traditions",type="all",query="";
+const validViews=["all","following","saved"];
+function readStoredValue(key, fallback) {
+  try {
+    const value=localStorage.getItem(key);
+    return value && validViews.includes(value) ? value : fallback;
+  } catch { return fallback; }
+}
+let view=readStoredValue("archangel.activeView","all");
+function persistValue(key, value) {
+  try { localStorage.setItem(key,value); }
+  catch { /* Keep the app usable if browser storage is unavailable. */ }
+}
+function syncViewButtons() {
+  document.querySelectorAll("[data-view]").forEach(button =>
+    button.classList.toggle("active", button.dataset.view===view)
+  );
+}
 function readStoredSet(key, fallback=[]) {
   try { const value=JSON.parse(localStorage.getItem(key)||"null"); return new Set(Array.isArray(value)?value:fallback); }
   catch { return new Set(fallback); }
@@ -87,7 +104,13 @@ function renderFigures(){$("figures").innerHTML=figures.slice(0,7).map(f=>`<div 
 $("search").addEventListener("input",e=>{query=e.target.value;renderStories()});$("typeFilter").addEventListener("change",e=>{type=e.target.value;renderStories()});
 document.querySelectorAll("[data-religion]").forEach(b=>b.onclick=()=>{religion=b.dataset.religion;document.querySelectorAll("[data-religion]").forEach(x=>x.classList.toggle("active",x===b));renderStories()});
 document.querySelectorAll("[data-side-religion]").forEach(b=>b.onclick=()=>{religion=b.dataset.sideReligion;document.querySelectorAll("[data-religion]").forEach(x=>x.classList.toggle("active",x.dataset.religion===religion));renderStories();window.scrollTo({top:550,behavior:"smooth"})});
-document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{view=b.dataset.view;document.querySelectorAll("[data-view]").forEach(x=>x.classList.toggle("active",x===b));renderStories()});
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{
+  view=b.dataset.view;
+  persistValue("archangel.activeView",view);
+  syncViewButtons();
+  renderStories();
+});
+syncViewButtons();
 $("refresh").onclick=()=>loadLiveFeed(true);
 $("howBtn").onclick=()=>alert("Archangel brings together public updates from configured institutional and news sources. Each card links to the original publisher. Source coverage is not exhaustive, and no single institution represents every member of a religious tradition. Follow and saved-story preferences are saved in this browser on this device. Following only includes stories that can be matched to a followed figure by name or configured source; some stories may not yet be linked to a figure.");
 renderFigures();renderStories();
