@@ -56,23 +56,40 @@ const stories=[
 {id:7,figure:"welby",tradition:"Christianity",type:"Social post",title:"How public social posts will be attributed",summary:"When a leader posts publicly on a supported social platform, the feed would show the account name, post time and a link to the original post. No social account has been connected in this prototype.",date:"Demo example",topic:"Social media · Attribution",source:"Church of England",url:"https://www.churchofengland.org/media",icon:"✝"},
 {id:8,figure:"ecumenical",tradition:"Christianity",type:"Official statement",title:"Adding Orthodox Christian statements to multi-faith coverage",summary:"The same editorial format would apply across traditions: a concise summary, clear attribution, publication date and a source link, without treating any single institution as representative of every believer.",date:"Demo example",topic:"Orthodox Christianity · Statements",source:"Ecumenical Patriarchate",url:"https://www.patriarchate.org/",icon:"✝"}
 ];
-let religion="All traditions",view="all",type="all",query="",followed=new Set(["pope","dalai"]),saved=new Set();
+let religion="All traditions",view="all",type="all",query="";
+function readStoredSet(key, fallback=[]) {
+  try { const value=JSON.parse(localStorage.getItem(key)||"null"); return new Set(Array.isArray(value)?value:fallback); }
+  catch { return new Set(fallback); }
+}
+let followed=readStoredSet("archangel.followedFigures",["pope","dalai"]);
+let saved=readStoredSet("archangel.savedStories",[]);
+function persistSet(key, value) {
+  try { localStorage.setItem(key, JSON.stringify([...value])); }
+  catch { toast("Preferences could not be saved in this browser"); }
+}
+function findRelatedFigures(story, sourceName="") {
+  const text=[story.title,story.summary,sourceName].filter(Boolean).join(" ").toLowerCase();
+  return figures.filter(f => {
+    const names=[f.name, f.source].filter(Boolean).map(v=>v.toLowerCase());
+    return names.some(name => name.length > 2 && text.includes(name));
+  }).map(f=>f.id);
+}
 let liveFeedStatus="Connecting to configured sources…", liveFeedLoading=false, lastLiveRefresh=null;
 const $=id=>document.getElementById(id);
 function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window._toast);window._toast=setTimeout(()=>t.classList.remove("show"),2400)}
-function currentStories(){return stories.filter(s=>(religion==="All traditions"||s.tradition===religion)&&(type==="all"||s.type===type)&&(view!=="following"||followed.has(s.figure))&&(view!=="saved"||saved.has(s.id))&&(!query||[s.title,s.summary,s.source,s.topic,s.tradition,figures.find(f=>f.id===s.figure)?.name].join(" ").toLowerCase().includes(query.toLowerCase())))}
+function currentStories(){return stories.filter(s=>(religion==="All traditions"||s.tradition===religion)&&(type==="all"||s.type===type)&&(view!=="following"||((s.figureIds||[s.figure]).some(id=>followed.has(id))))&&(view!=="saved"||saved.has(s.id))&&(!query||[s.title,s.summary,s.source,s.topic,s.tradition,figures.find(f=>f.id===s.figure)?.name].join(" ").toLowerCase().includes(query.toLowerCase())))}
 function renderStories(){const arr=currentStories();$("countLabel").textContent=arr.length+" "+(arr.length===1?"story":"stories");$("feedTitle").textContent=view==="saved"?"Saved stories":view==="following"?"Your following feed":"Latest updates";$("feedSubtitle").textContent=view==="saved"?"Stories you've bookmarked in this browser.":view==="following"?"Updates from figures you've chosen to follow.":liveFeedStatus;if(!arr.length){$("stories").innerHTML='<div class="empty"><strong>Nothing here just yet</strong>Try another tradition, clear your search, or save a story from Discover.</div>';return}
 $("stories").innerHTML=arr.map(s=>{const f=figures.find(f=>f.id===s.figure);return `<article class="story"><div class="story-top"><div class="avatar">${s.icon}</div><div class="who"><strong>${f.name}</strong><small>${s.tradition} · ${f.role}</small></div><span class="kind ${s.type==="News coverage"?"news":s.type==="Social post"?"social":""}">${s.type}</span></div><h3>${s.title}</h3><p>${s.summary}</p><div class="story-meta"><span>${s.date}</span><span class="dot"></span><span>${s.topic}</span></div><div class="story-actions"><a class="source" href="${s.url}" target="_blank" rel="noopener noreferrer">↗ Visit source</a><button class="action ${saved.has(s.id)?"saved":""}" data-save="${s.id}">${saved.has(s.id)?"✓ Saved":"☆ Save"}</button><button class="action" data-share="${s.id}">↗ Share</button><span class="spacer"></span><span style="font-size:10px;color:#8a948d">Original source</span></div></article>`}).join("");
-document.querySelectorAll("[data-save]").forEach(b=>b.onclick=()=>{const id=stories.find(s=>String(s.id)===b.dataset.save)?.id;if(id===undefined)return;saved.has(id)?saved.delete(id):saved.add(id);renderStories();toast(saved.has(id)?"Story saved":"Removed from saved stories")});
+document.querySelectorAll("[data-save]").forEach(b=>b.onclick=()=>{const id=stories.find(s=>String(s.id)===b.dataset.save)?.id;if(id===undefined)return;saved.has(id)?saved.delete(id):saved.add(id);persistSet("archangel.savedStories",saved);renderStories();toast(saved.has(id)?"Story saved":"Removed from saved stories")});
 document.querySelectorAll("[data-share]").forEach(b=>b.onclick=()=>{const s=stories.find(x=>String(x.id)===b.dataset.share);const text=`${s.title}\n${s.url}`;if(navigator.share)navigator.share({title:s.title,url:s.url}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>toast("Source link copied")).catch(()=>toast(text));else toast(s.url)});
 }
-function renderFigures(){$("figures").innerHTML=figures.slice(0,7).map(f=>`<div class="figure"><div class="avatar">${f.icon}</div><div class="figure-info"><strong>${f.name}</strong><small>${f.tradition}</small></div><button class="follow ${followed.has(f.id)?"on":""}" data-follow="${f.id}">${followed.has(f.id)?"Following":"Follow +"}</button></div>`).join("");document.querySelectorAll("[data-follow]").forEach(b=>b.onclick=()=>{const id=b.dataset.follow;followed.has(id)?followed.delete(id):followed.add(id);renderFigures();renderStories();toast(followed.has(id)?"Figure followed":"Figure unfollowed")})}
+function renderFigures(){$("figures").innerHTML=figures.slice(0,7).map(f=>`<div class="figure"><div class="avatar">${f.icon}</div><div class="figure-info"><strong>${f.name}</strong><small>${f.tradition}</small></div><button class="follow ${followed.has(f.id)?"on":""}" data-follow="${f.id}">${followed.has(f.id)?"Following":"Follow +"}</button></div>`).join("");document.querySelectorAll("[data-follow]").forEach(b=>b.onclick=()=>{const id=b.dataset.follow;followed.has(id)?followed.delete(id):followed.add(id);persistSet("archangel.followedFigures",followed);renderFigures();renderStories();toast(followed.has(id)?"Figure followed":"Figure unfollowed")})}
 $("search").addEventListener("input",e=>{query=e.target.value;renderStories()});$("typeFilter").addEventListener("change",e=>{type=e.target.value;renderStories()});
 document.querySelectorAll("[data-religion]").forEach(b=>b.onclick=()=>{religion=b.dataset.religion;document.querySelectorAll("[data-religion]").forEach(x=>x.classList.toggle("active",x===b));renderStories()});
 document.querySelectorAll("[data-side-religion]").forEach(b=>b.onclick=()=>{religion=b.dataset.sideReligion;document.querySelectorAll("[data-religion]").forEach(x=>x.classList.toggle("active",x.dataset.religion===religion));renderStories();window.scrollTo({top:550,behavior:"smooth"})});
 document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{view=b.dataset.view;document.querySelectorAll("[data-view]").forEach(x=>x.classList.toggle("active",x===b));renderStories()});
 $("refresh").onclick=()=>loadLiveFeed(true);
-$("howBtn").onclick=()=>alert("Archangel brings together public updates from configured institutional and news sources. Each card links to the original publisher. Source coverage is not exhaustive, and no single institution represents every member of a religious tradition. Follow and saved-story preferences are currently held in this browser session.");
+$("howBtn").onclick=()=>alert("Archangel brings together public updates from configured institutional and news sources. Each card links to the original publisher. Source coverage is not exhaustive, and no single institution represents every member of a religious tradition. Follow and saved-story preferences are saved in this browser on this device. Following only includes stories that can be matched to a followed figure by name or configured source; some stories may not yet be linked to a figure.");
 renderFigures();renderStories();
 
 // If public Supabase configuration is supplied in public/config.js, load live
@@ -105,14 +122,17 @@ async function loadLiveFeed(manual = false) {
     }
     stories.splice(0, stories.length, ...data.map(s => {
       const src = Array.isArray(s.sources) ? s.sources[0] : s.sources;
-      const fig = figures.find(f => f.tradition === s.tradition) || figures[0];
+      const traditionFigure = figures.find(f => f.tradition === s.tradition) || figures[0];
+      const storyForMatching = {title:s.title || "", summary:s.summary || ""};
+      const figureIds = findRelatedFigures(storyForMatching, src?.name || "");
+      const displayFigure = figures.find(f => figureIds.includes(f.id)) || traditionFigure;
       return {
-        id: s.id, figure: fig.id, tradition: s.tradition || fig.tradition,
+        id: s.id, figure: displayFigure.id, figureIds, tradition: s.tradition || displayFigure.tradition,
         type: s.content_type || "News coverage", title: s.title || "Untitled update",
         summary: s.summary || "No summary available yet.",
         date: s.published_at ? new Date(s.published_at).toLocaleString() : "Date not provided",
         topic: s.summary_is_ai ? "AI-assisted summary" : "Source excerpt",
-        source: src?.name || "Original source", url: s.story_url, icon: fig.icon
+        source: src?.name || "Original source", url: s.story_url, icon: displayFigure.icon
       };
     }));
     lastLiveRefresh = new Date();
