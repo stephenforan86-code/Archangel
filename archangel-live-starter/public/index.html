@@ -60,11 +60,6 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
   <div class="sidecard" style="padding:22px">
     <div class="eyebrow">Read and reflect</div><h2 style="margin:6px 0 8px;font-size:24px">Bible Passages</h2>
     <p style="margin:0 0 18px;color:var(--muted);font-size:14px">Explore a daily featured passage or browse the Bible by book and chapter. Passage text uses the public-domain World English Bible (WEB).</p>
-    <div id="dailyPassage" class="sidecard" style="background:#faf8f1;margin-bottom:20px">
-      <div class="caption">DAILY FEATURED PASSAGE</div><h3 id="dailyReference" style="font-size:20px;margin:8px 0">Loading today’s passage…</h3>
-      <p id="dailyText" style="font-size:15px;line-height:1.8;color:var(--ink)">Please wait while the passage loads.</p>
-      <p id="dailyNote" style="margin:12px 0 0;color:var(--muted);font-size:12px">A moment for reflection.</p>
-    </div>
     <h3 style="margin:0 0 12px">Browse the Bible</h3>
     <div class="toolbar" style="margin-bottom:14px">
       <select class="select" id="bibleBook" aria-label="Choose a Bible book" style="flex:1;min-width:180px"></select>
@@ -219,11 +214,10 @@ async function loadHeroDailyVerse(){
     $("heroDailyReference").textContent=reference+" · World English Bible (WEB)";
   }
 }
-async function loadDailyPassage(){const index=Math.floor(Date.now()/86400000)%dailyPassages.length;const reference=dailyPassages[index];$("dailyReference").textContent=reference;$("dailyText").textContent="Loading passage…";$("dailyNote").textContent=reflections[index%reflections.length];try{const data=await fetchBiblePassage(reference);$("dailyReference").textContent=data.reference||reference;$("dailyText").textContent=(data.verses||[]).map(v=>(v.verse? v.verse+". ":"")+v.text.trim()).join(" ")||data.text||"No passage text returned."}catch(error){$("dailyText").textContent="The passage could not be loaded right now. Please check your internet connection and try again."}}
 async function loadBibleChapter(){const reference=bookSelect.value+" "+chapterSelect.value;$("chapterHeading").textContent=reference;$("chapterText").textContent="Loading chapter…";$("bibleStatus").textContent="";try{const data=await fetchBiblePassage(reference);$("chapterHeading").textContent=data.reference||reference;$("chapterText").innerHTML=(data.verses||[]).map(v=>`<p style="margin:0 0 8px"><sup style="color:#7a806f;font-weight:700;margin-right:6px">${v.verse}</sup>${v.text.trim()}</p>`).join("");$("bibleStatus").textContent="Translation: World English Bible (WEB), public domain."}catch(error){$("chapterText").textContent="The chapter could not be loaded right now. Please try again."}}
 $("loadChapter").addEventListener("click",loadBibleChapter);
 function closeBibleSection(){ $("bibleSection").hidden=true; $("newsLayout").hidden=false; document.querySelector(".toolbar").hidden=false; $("bibleCategoryBtn").classList.remove("active"); $("bibleCategoryBtn").setAttribute("aria-expanded","false"); }
-$("bibleCategoryBtn").addEventListener("click",()=>{const opening=$("bibleSection").hidden;if(opening){$("bibleSection").hidden=false;$("newsLayout").hidden=true;document.querySelector(".toolbar").hidden=true;$("bibleCategoryBtn").classList.add("active");$("bibleCategoryBtn").setAttribute("aria-expanded","true");loadDailyPassage();loadBibleChapter();window.scrollTo({top:450,behavior:"smooth"})}else{closeBibleSection();window.scrollTo({top:450,behavior:"smooth"})}});
+$("bibleCategoryBtn").addEventListener("click",()=>{const opening=$("bibleSection").hidden;if(opening){$("bibleSection").hidden=false;$("newsLayout").hidden=true;document.querySelector(".toolbar").hidden=true;$("bibleCategoryBtn").classList.add("active");$("bibleCategoryBtn").setAttribute("aria-expanded","true");loadBibleChapter();window.scrollTo({top:450,behavior:"smooth"})}else{closeBibleSection();window.scrollTo({top:450,behavior:"smooth"})}});
 document.addEventListener("click",event=>{if($("bibleSection").hidden)return;const clickedButton=event.target.closest("button");if(clickedButton&&!$("bibleSection").contains(clickedButton)&&clickedButton.id!=="bibleCategoryBtn"){closeBibleSection();}});
 
 $("refresh").onclick=()=>loadLiveFeed(true);
