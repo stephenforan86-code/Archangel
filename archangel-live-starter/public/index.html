@@ -122,9 +122,8 @@ function findRelatedFigures(story, sourceName="") {
     }
     if (f.id === "sarah-mullally") {
       const explicitMention = /\\b(sarah mullally|archbishop sarah|archbishop of canterbury|dame sarah mullally)\\b/i.test(text);
-      const officialFeed = source === "archbishop of canterbury — news and statements" ||
-                           source === "archbishop of canterbury";
-      return explicitMention || officialFeed;
+      const officialFeed = source.includes("archbishop of canterbury");
+return explicitMention || officialFeed;
     }
     return false;
   }).map(f => f.id);
