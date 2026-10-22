@@ -165,6 +165,15 @@ const figures=[
     icon:"✝",
     source:"Word on Fire",
     url:"https://www.wordonfire.org/author/bishop-robert-barron/"
+  },
+  {
+    id:"willy-rice",
+    name:"Willy Rice",
+    tradition:"Christianity",
+    role:"President of the Southern Baptist Convention · Senior Pastor, Calvary Baptist Church",
+    icon:"✝",
+    source:"Baptist Press",
+    url:"https://www.sbc.net/sbc-president/"
   }
 ];
 const stories=[];
@@ -247,6 +256,10 @@ function findRelatedFigures(story, sourceName="") {
     if (f.id === "robert-barron") {
       // Word on Fire publishes many kinds of content; only attach explicit mentions of Bishop Barron.
       return /\b(robert barron|bishop barron|bishop robert barron)\b/i.test(text);
+    }
+    if (f.id === "willy-rice") {
+      // Baptist Press covers the wider SBC; associate only stories explicitly about Willy Rice.
+      return /\b(willy rice|william rice|president rice)\b/i.test(text);
     }
     return false;
   }).map(f => f.id);
