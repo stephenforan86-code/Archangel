@@ -1,0 +1,12 @@
+{ 
+  "name": "archangel",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-19",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  "secrets": {
+    "required": ["STRIPE_SECRET_KEY"]
+  }
+}
