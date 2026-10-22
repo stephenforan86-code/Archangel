@@ -281,8 +281,51 @@ let liveFeedStatus="Connecting to configured sources…", liveFeedLoading=false,
 const $=id=>document.getElementById(id);
 function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window._toast);window._toast=setTimeout(()=>t.classList.remove("show"),2400)}
 function currentStories(){return stories.filter(s=>(religion==="All traditions" ? s.tradition==="Christianity" : s.subTradition===religion)&&(subTradition==="all"||s.subTradition===subTradition)&&(type==="all"||s.type===type)&&(view!=="following"||((s.figureIds||[]).some(id=>followed.has(id))))&&(view!=="saved"||saved.has(s.id))&&(!query||[s.title,s.summary,s.source,s.topic,s.tradition,s.subTradition,figures.find(f=>f.id===s.figure)?.name].join(" ").toLowerCase().includes(query.toLowerCase())))}
+
+// Category-aware fallback images. Original article images always take priority.
+// These are illustrative fallbacks, not photographs of the specific event described.
+const fallbackImagePools = {
+  pope: [
+    {url:"https://commons.wikimedia.org/wiki/Special:FilePath/Pope_Leo_XIV_waving.jpg",alt:"Pope Leo XIV waving (Wikimedia Commons)"},
+    {url:"https://images.unsplash.com/photo-1519491050282-cf00c82424b4?auto=format&fit=crop&w=1200&q=80",alt:"Church interior (illustrative image)"},
+    {url:"https://images.unsplash.com/photo-1548625361-987f4f6c7c31?auto=format&fit=crop&w=1200&q=80",alt:"Vatican and Catholic faith (illustrative image)"},
+    {url:"https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1200&q=80",alt:"Church setting (illustrative image)"}
+  ],
+  church: [
+    {url:"https://images.unsplash.com/photo-1438032005730-c779502df39b?auto=format&fit=crop&w=1200&q=80",alt:"Church interior (illustrative image)"},
+    {url:"https://images.unsplash.com/photo-1519491050282-cf00c82424b4?auto=format&fit=crop&w=1200&q=80",alt:"Church interior (illustrative image)"},
+    {url:"https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1200&q=80",alt:"Church setting (illustrative image)"}
+  ],
+  bible: [
+    {url:"https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1200&q=80",alt:"Bible and faith (illustrative image)"},
+    {url:"https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=1200&q=80",alt:"Reading and reflection (illustrative image)"}
+  ],
+  community: [
+    {url:"https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=1200&q=80",alt:"Community volunteering (illustrative image)"},
+    {url:"https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=1200&q=80",alt:"Community support (illustrative image)"}
+  ],
+  general: [
+    {url:"https://images.unsplash.com/photo-1438032005730-c779502df39b?auto=format&fit=crop&w=1200&q=80",alt:"Christian church (illustrative image)"},
+    {url:"https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1200&q=80",alt:"Church setting (illustrative image)"},
+    {url:"https://images.unsplash.com/photo-1519491050282-cf00c82424b4?auto=format&fit=crop&w=1200&q=80",alt:"Church interior (illustrative image)"}
+  ]
+};
+function getFallbackImage(story){
+  const text=[story.title,story.summary,story.tradition,story.subTradition,story.source].filter(Boolean).join(" ").toLowerCase();
+  let pool=fallbackImagePools.general;
+  if(/pope|vatican|holy see|papal|leo xiv|pontiff|roman catholic/.test(text)) pool=fallbackImagePools.pope;
+  else if(/charit|community|volunteer|homeless|food bank|outreach|humanitarian/.test(text)) pool=fallbackImagePools.community;
+  else if(/bible|scripture|prayer|theolog|faith|worship|sermon|devotion/.test(text)) pool=fallbackImagePools.bible;
+  else if(/church|bishop|archbishop|pastor|clergy|denomination|methodist|baptist|anglican|orthodox|synod|conference/.test(text)) pool=fallbackImagePools.church;
+  // Stable choice per story prevents the image changing every time the feed rerenders.
+  const key=String(story.id||story.title||text);
+  let hash=0; for(let i=0;i<key.length;i++) hash=(hash*31+key.charCodeAt(i))>>>0;
+  return pool[hash%pool.length];
+}
+
 function renderStories(){const arr=currentStories();$("countLabel").textContent=arr.length+" "+(arr.length===1?"story":"stories");$("feedTitle").textContent=view==="saved"?"Saved stories":view==="following"?"Your following feed":"Latest updates";$("feedSubtitle").textContent=view==="saved"?"Stories you've bookmarked in this browser.":view==="following"?"Updates from figures you've chosen to follow.":(religion==="All traditions"?"Christian news across configured sources.":("Stories filed under "+religion+"."));if(!arr.length){$("stories").innerHTML='<div class="empty"><strong>Nothing here just yet</strong>Try another tradition, clear your search, or save a story from Discover.</div>';return}
-$("stories").innerHTML=arr.map(s=>{const f=figures.find(f=>f.id===s.figure);const isFigureStory=!!f&&(s.figureIds||[s.figure]).includes(f.id);const headline=isFigureStory?f.name:(s.source||"Original source");const subline=isFigureStory?`${s.tradition} · ${f.role}`:`${s.tradition} · Source update`;const imageMarkup = s.imageUrl ? `<img class="story-image" src="${s.imageUrl}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : "";return `<article class="story">${imageMarkup}<div class="story-top"><div class="avatar">${isFigureStory?s.icon:"✳"}</div><div class="who"><strong>${headline}</strong><small>${subline}</small></div><span class="kind ${s.type==="News coverage"?"news":s.type==="Social post"?"social":""}">${s.type}</span></div><h3>${s.title}</h3><p>${s.summary}</p><div class="story-meta"><span>${s.date}</span><span class="dot"></span><span>${s.topic}</span></div><div class="story-actions"><a class="source" href="${s.url}" target="_blank" rel="noopener noreferrer">↗ Visit source</a><button class="action ${saved.has(s.id)?"saved":""}" data-save="${s.id}">${saved.has(s.id)?"✓ Saved":"☆ Save"}</button><button class="action" data-share="${s.id}">↗ Share</button><span class="spacer"></span><span style="font-size:10px;color:#8a948d">Original source</span></div></article>`}).join("");
+$("stories").innerHTML=arr.map(s=>{const f=figures.find(f=>f.id===s.figure);const isFigureStory=!!f&&(s.figureIds||[s.figure]).includes(f.id);const headline=isFigureStory?f.name:(s.source||"Original source");const subline=isFigureStory?`${s.tradition} · ${f.role}`:`${s.tradition} · Source update`;const fallbackImage = getFallbackImage(s);
+const imageMarkup = `<img class="story-image" src="${s.imageUrl || fallbackImage.url}" data-fallback-src="${fallbackImage.url}" alt="${s.imageUrl ? "" : fallbackImage.alt}" loading="lazy" referrerpolicy="no-referrer" onerror="if(this.dataset.fallbackTried!=='1' && this.dataset.fallbackSrc && this.src!==this.dataset.fallbackSrc){this.dataset.fallbackTried='1';this.src=this.dataset.fallbackSrc}else{this.remove()}">`;return `<article class="story">${imageMarkup}<div class="story-top"><div class="avatar">${isFigureStory?s.icon:"✳"}</div><div class="who"><strong>${headline}</strong><small>${subline}</small></div><span class="kind ${s.type==="News coverage"?"news":s.type==="Social post"?"social":""}">${s.type}</span></div><h3>${s.title}</h3><p>${s.summary}</p><div class="story-meta"><span>${s.date}</span><span class="dot"></span><span>${s.topic}</span></div><div class="story-actions"><a class="source" href="${s.url}" target="_blank" rel="noopener noreferrer">↗ Visit source</a><button class="action ${saved.has(s.id)?"saved":""}" data-save="${s.id}">${saved.has(s.id)?"✓ Saved":"☆ Save"}</button><button class="action" data-share="${s.id}">↗ Share</button><span class="spacer"></span><span style="font-size:10px;color:#8a948d">Original source</span></div></article>`}).join("");
 document.querySelectorAll("[data-save]").forEach(b=>b.onclick=()=>{const id=stories.find(s=>String(s.id)===b.dataset.save)?.id;if(id===undefined)return;saved.has(id)?saved.delete(id):saved.add(id);persistSet("archangel.savedStories",saved);renderStories();toast(saved.has(id)?"Story saved":"Removed from saved stories")});
 document.querySelectorAll("[data-share]").forEach(b=>b.onclick=()=>{const s=stories.find(x=>String(x.id)===b.dataset.share);const text=`${s.title}\n${s.url}`;if(navigator.share)navigator.share({title:s.title,url:s.url}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>toast("Source link copied")).catch(()=>toast(text));else toast(s.url)});
 }
