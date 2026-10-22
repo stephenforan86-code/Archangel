@@ -138,6 +138,15 @@ const figures=[
     icon:"✝",
     source:"World Methodist Council",
     url:"https://worldmethodistcouncil.org/president/"
+  },
+  {
+    id:"reynaldo-leao-neto",
+    name:"Revd Dr Reynaldo Ferreira Leão Neto",
+    tradition:"Christianity",
+    role:"General Secretary · World Methodist Council",
+    icon:"✝",
+    source:"World Methodist Council",
+    url:"https://worldmethodistcouncil.org/general-secretary/"
   }
 ];
 const stories=[];
@@ -208,6 +217,10 @@ function findRelatedFigures(story, sourceName="") {
     if (f.id === "debra-wallace-padgett") {
       // The World Methodist Council feed covers the whole global Methodist movement.
       return /\b(debra wallace[- ]padgett|bishop debra|bishop wallace[- ]padgett)\b/i.test(text);
+    }
+    if (f.id === "reynaldo-leao-neto") {
+      // Match explicit mentions only; do not attach every Council story to its General Secretary.
+      return /\b(reynaldo ferreira le[aã]o neto|reynaldo le[aã]o neto|revd?\.? dr\.? reynaldo|reverend doctor reynaldo)\b/i.test(text);
     }
     return false;
   }).map(f => f.id);
