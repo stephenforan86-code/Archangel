@@ -83,6 +83,13 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
 .support-pay:disabled{opacity:.45;cursor:not-allowed}
 .support-note{background:#f7f3e7;border-radius:10px;padding:11px 12px;font-size:12px!important;margin-top:13px!important}
 .support-status{font-size:12px;color:#8a6124;margin-top:10px;min-height:18px}
+
+.support-management{margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}
+.support-management-heading{font-weight:800;color:var(--ink)!important;margin:0 0 8px!important}
+.support-management-link{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:8px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;color:var(--ink);background:#fff;text-decoration:none;font-weight:750}
+.support-management-link:hover{border-color:var(--gold);background:#fbf8ef}
+.support-management-note{font-size:11px!important;line-height:1.45;margin:10px 0 0!important}
+
 @media(max-width:560px){.support-top-btn{padding:8px 10px;font-size:12px}.support-modal{padding:20px 16px}.support-modal h2{font-size:25px}}
 
 
@@ -182,6 +189,12 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
     <p class="support-hint" id="supportCustomHint" hidden>For a custom one-off contribution, Stripe will ask you to confirm the amount again on its secure checkout page. Monthly support currently uses the preset amounts above.</p>
     <button class="support-pay" id="supportPayBtn" type="button" disabled>Continue to secure checkout</button>
     <div class="support-status" id="supportStatus" role="status" aria-live="polite">Payment links need to be configured before support can be accepted.</div>
+    <div class="support-management" aria-label="Manage an existing contribution">
+      <p class="support-management-heading">Already supporting Archangel?</p>
+      <a class="support-management-link" href="https://billing.stripe.com/p/login/test_00w14m48s8zA7q1cge6Zy00" target="_blank" rel="noopener noreferrer">Manage my contribution <span aria-hidden="true">↗</span></a>
+      <a class="support-management-link" href="mailto:support@archangel-news.com?subject=Archangel%20refund%20request&amp;body=Hello%20Archangel%20Support%2C%0A%0AI%20would%20like%20to%20request%20a%20refund.%0A%0AEmail%20used%20at%20checkout%3A%20%0APayment%20date%3A%20%0AAmount%20and%20currency%3A%20%0AReason%20(optional)%3A%20%0A%0AThank%20you.">Request a refund <span aria-hidden="true">↗</span></a>
+      <p class="support-management-note">The management link currently opens the Stripe Sandbox portal for testing. Refund requests go to support@archangel-news.com.</p>
+    </div>
     <p class="support-note">Contributions are voluntary and support the running of this publication. They are not charitable donations and are not represented as tax-deductible. Payments are processed by Stripe when checkout is configured.</p>
   </section>
 </div>
