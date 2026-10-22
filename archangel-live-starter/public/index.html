@@ -120,6 +120,15 @@ const figures=[
     icon:"✝",
     source:"Archbishop of Canterbury",
     url:"https://www.archbishopofcanterbury.org/news"
+  },
+  {
+    id:"mark-slaney",
+    name:"The Revd Mark Slaney",
+    tradition:"Christianity",
+    role:"President of the Methodist Conference · 2026–27",
+    icon:"✝",
+    source:"The Methodist Church",
+    url:"https://www.methodist.org.uk/about/news/"
   }
 ];
 const stories=[];
@@ -182,6 +191,10 @@ function findRelatedFigures(story, sourceName="") {
       const officialFeed = source === "archbishop of canterbury — news and statements" ||
                            source === "archbishop of canterbury";
       return explicitMention || officialFeed;
+    }
+    if (f.id === "mark-slaney") {
+      // Only attach stories that explicitly mention Mark; the Methodist news feed covers many topics.
+      return /\b(mark slaney|the rev(?:erend)?\.? mark slaney|the revd mark slaney)\b/i.test(text);
     }
     return false;
   }).map(f => f.id);
