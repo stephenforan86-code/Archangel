@@ -85,6 +85,14 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
 .support-status{font-size:12px;color:#8a6124;margin-top:10px;min-height:18px}
 @media(max-width:560px){.support-top-btn{padding:8px 10px;font-size:12px}.support-modal{padding:20px 16px}.support-modal h2{font-size:25px}}
 
+
+/* Mobile hero headline: keep the two-line wording used on desktop. */
+@media(max-width:560px){
+  .hero-title-first{display:block!important}
+  .desktop-period{display:inline!important}
+  .hero-title-second{display:block!important}
+  .hero-title-second::before{content:none!important}
+}
 </style>
 </head>
 <body><div class="app" id="homeTop">
