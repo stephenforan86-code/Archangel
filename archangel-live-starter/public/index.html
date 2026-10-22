@@ -476,10 +476,12 @@ async function loadPrayerRequests() {
   const client = prayerClient();
   if (!client) { host.innerHTML='<div class="empty"><strong>Prayer Wall is not connected yet</strong>Configure Supabase and run the supplied prayer-request SQL setup to enable submissions and public requests.</div>'; return; }
   host.innerHTML='<div class="empty">Loading approved requests…</div>';
-  const {data,error} = await client.from("prayer_requests").select("id,display_name,request_text,created_at,is_starter").eq("status","approved").order("created_at",{ascending:false}).limit(30);
+  const {data,error} = await client.from("prayer_requests").select("id,display_name,request_text,created_at,is_starter").eq("status","approved").limit(30);
   if (error) { host.innerHTML='<div class="empty"><strong>Prayer requests are not available yet</strong>The Prayer Wall database setup may still be required.</div>'; $("prayerListStatus").textContent=""; return; }
   host.replaceChildren();
   if (!data || !data.length) { host.innerHTML='<div class="empty"><strong>No public requests yet</strong>When requests have been reviewed and approved, they will appear here.</div>'; return; }
+  // Shuffle the visible requests so the wall doesn't always favour the newest entries.
+  for (let i = data.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [data[i], data[j]] = [data[j], data[i]]; }
   data.forEach(item=>{
     const card=document.createElement("article"); card.className="prayer-card";
     const heading=document.createElement("h3"); heading.textContent=item.display_name || "Anonymous";
