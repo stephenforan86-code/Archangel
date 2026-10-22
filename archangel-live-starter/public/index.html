@@ -57,13 +57,36 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
 @media(max-width:760px){.prayer-grid{grid-template-columns:1fr}}
 
 [hidden]{display:none!important}
+
+/* Support Archangel */
+.support-top-btn{border:1px solid var(--gold);border-radius:99px;background:var(--gold);color:#252747;padding:9px 14px;font-weight:800;white-space:nowrap}
+.support-top-btn:hover{filter:brightness(.96)}
+.support-overlay{position:fixed;inset:0;background:#17182db8;z-index:30;display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
+.support-modal{width:min(100%,520px);max-height:calc(100vh - 36px);overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 25px 90px #0004;padding:clamp(20px,4vw,30px);position:relative}
+.support-close{position:absolute;right:16px;top:14px;border:1px solid var(--line);background:#fff;border-radius:50%;width:36px;height:36px;font-size:21px;color:var(--ink)}
+.support-modal h2{font-family:var(--brand-serif);font-size:29px;line-height:1.15;margin:7px 42px 8px 0}
+.support-modal p{color:var(--muted);font-size:14px;margin:0 0 16px}
+.support-label{display:block;font-size:12px;font-weight:800;margin:16px 0 8px}
+.support-choice-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.support-choice{border:1px solid var(--line);border-radius:11px;padding:11px 10px;background:white;color:var(--ink);font-weight:700}
+.support-choice[aria-pressed="true"]{background:var(--sage);border:2px solid var(--accent);padding:10px 9px}
+.support-amounts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.support-amount{border:1px solid var(--line);border-radius:12px;background:#fff;padding:14px 8px;font-size:18px;font-weight:800;color:var(--ink)}
+.support-amount[aria-pressed="true"]{border:2px solid var(--accent);background:var(--sage);padding:13px 7px}
+.support-amount small{display:block;font-size:10px;color:var(--muted);font-weight:600;margin-top:2px}
+.support-pay{width:100%;margin-top:18px;border:0;border-radius:12px;background:var(--accent);color:white;padding:13px 16px;font-weight:800;font-size:15px}
+.support-pay:disabled{opacity:.45;cursor:not-allowed}
+.support-note{background:#f4f1e9;border-radius:10px;padding:11px 12px;font-size:12px!important;margin-top:13px!important}
+.support-status{font-size:12px;color:#8a6124;margin-top:10px;min-height:18px}
+@media(max-width:560px){.support-top-btn{padding:8px 10px;font-size:12px}.support-modal{padding:20px 16px}.support-modal h2{font-size:25px}}
+
 </style>
 </head>
 <body><div class="app" id="homeTop">
 <header class="topbar">
 <a class="brand" href="#homeTop" aria-label="Archangel home"><div class="brandmark" role="img" aria-label="Archangel winged cross emblem"><svg viewBox="0 0 965 750" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" focusable="false"><path d="M 857.0,19.0 L 855.0,57.0 L 845.0,97.0 L 830.0,132.0 L 803.0,175.0 L 771.0,213.0 L 742.0,241.0 L 704.0,272.0 L 654.0,308.0 L 636.0,324.0 L 617.0,346.0 L 606.0,365.0 L 596.0,401.0 L 598.0,493.0 L 594.0,525.0 L 585.0,557.0 L 574.0,581.0 L 560.0,602.0 L 542.0,620.0 L 542.0,666.0 L 594.0,658.0 L 638.0,646.0 L 685.0,627.0 L 716.0,610.0 L 749.0,586.0 L 772.0,564.0 L 792.0,539.0 L 802.0,520.0 L 785.0,523.0 L 738.0,523.0 L 704.0,527.0 L 668.0,539.0 L 643.0,555.0 L 642.0,553.0 L 653.0,541.0 L 671.0,527.0 L 701.0,514.0 L 741.0,507.0 L 796.0,505.0 L 826.0,499.0 L 843.0,493.0 L 863.0,483.0 L 884.0,468.0 L 907.0,443.0 L 924.0,414.0 L 935.0,380.0 L 938.0,357.0 L 905.0,386.0 L 864.0,407.0 L 819.0,419.0 L 738.0,431.0 L 701.0,442.0 L 677.0,453.0 L 675.0,452.0 L 685.0,444.0 L 712.0,429.0 L 824.0,392.0 L 874.0,368.0 L 899.0,349.0 L 916.0,331.0 L 931.0,309.0 L 940.0,290.0 L 946.0,271.0 L 950.0,247.0 L 950.0,217.0 L 942.0,175.0 L 927.0,208.0 L 914.0,228.0 L 897.0,248.0 L 874.0,269.0 L 826.0,300.0 L 760.0,330.0 L 757.0,329.0 L 802.0,299.0 L 838.0,267.0 L 869.0,226.0 L 888.0,183.0 L 896.0,139.0 L 894.0,99.0 L 889.0,77.0 L 880.0,53.0 L 866.0,29.0 Z" fill="#182F67"/><path d="M 109.0,18.0 L 96.0,34.0 L 85.0,54.0 L 72.0,97.0 L 70.0,143.0 L 77.0,181.0 L 93.0,220.0 L 121.0,260.0 L 162.0,298.0 L 208.0,329.0 L 206.0,330.0 L 141.0,301.0 L 112.0,284.0 L 84.0,263.0 L 52.0,229.0 L 35.0,202.0 L 24.0,175.0 L 16.0,211.0 L 15.0,241.0 L 19.0,269.0 L 28.0,296.0 L 44.0,324.0 L 61.0,344.0 L 77.0,358.0 L 98.0,372.0 L 144.0,393.0 L 249.0,427.0 L 276.0,441.0 L 292.0,453.0 L 290.0,454.0 L 254.0,438.0 L 228.0,431.0 L 147.0,419.0 L 107.0,409.0 L 65.0,389.0 L 46.0,375.0 L 27.0,357.0 L 31.0,383.0 L 42.0,415.0 L 51.0,432.0 L 69.0,456.0 L 89.0,474.0 L 118.0,491.0 L 162.0,504.0 L 235.0,508.0 L 268.0,515.0 L 294.0,527.0 L 321.0,550.0 L 322.0,554.0 L 293.0,537.0 L 262.0,527.0 L 226.0,523.0 L 182.0,523.0 L 163.0,520.0 L 171.0,535.0 L 189.0,559.0 L 213.0,583.0 L 248.0,609.0 L 289.0,631.0 L 337.0,649.0 L 387.0,661.0 L 424.0,666.0 L 424.0,621.0 L 408.0,605.0 L 393.0,584.0 L 380.0,556.0 L 372.0,528.0 L 367.0,487.0 L 370.0,410.0 L 368.0,391.0 L 360.0,366.0 L 347.0,344.0 L 323.0,318.0 L 220.0,238.0 L 187.0,205.0 L 161.0,173.0 L 138.0,137.0 L 123.0,104.0 L 110.0,54.0 Z" fill="#182F67"/><path d="M 458.0,25.0 L 458.0,190.0 L 456.0,192.0 L 296.0,192.0 L 296.0,242.0 L 456.0,242.0 L 458.0,244.0 L 458.0,736.0 L 508.0,736.0 L 508.0,244.0 L 510.0,242.0 L 670.0,242.0 L 670.0,192.0 L 510.0,192.0 L 508.0,190.0 L 508.0,25.0 Z" fill="#C69A35"/></svg></div><div><strong>Archangel</strong><small>CHRISTIAN NEWS NETWORK</small></div></a>
 <nav class="toplinks"><button class="active" data-view="all">Discover</button><button data-view="following">Following</button><button data-view="saved">Saved stories</button><button type="button" id="prayerWallBtn">Prayer Wall</button><button type="button" id="mobileFiguresBtn" class="mobile-figures-btn">Figures to follow</button></nav>
-<button class="profile-btn" id="howBtn">About Archangel ↗</button>
+<div style="display:flex;gap:8px;align-items:center"><button class="support-top-btn" id="supportOpenBtn" type="button">♥ Support Archangel</button><button class="profile-btn" id="howBtn">About Archangel ↗</button></div>
 </header>
 <section class="hero"><div class="hero-inner">
 <div><div class="eyebrow">Christian News · Clear Perspective</div><h1>Faith. News. Perspective.</h1><p>News and official updates from across the Christian world, brought together with concise summaries and links to original sources.</p></div>
@@ -121,9 +144,35 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
 <div class="sidecard"><h3>Our source standards</h3><div class="source-rule"><span>✓</span><div><b>Original links</b><small>Open the primary source where available.</small></div></div><div class="source-rule"><span>✓</span><div><b>Clear labels</b><small>Separate official statements from reporting.</small></div></div><div class="source-rule"><span>✓</span><div><b>Context, not spin</b><small>Summaries aim to be concise and neutral.</small></div></div></div>
 </aside></div>
 </main><footer class="footer">Archangel · Christian News. Clear Perspective. Public-source updates with links to original publishers. Source affiliations and perspectives vary; see each original publication for context.</footer>
+
+<div class="support-overlay" id="supportOverlay" hidden>
+  <section class="support-modal" role="dialog" aria-modal="true" aria-labelledby="supportTitle" aria-describedby="supportIntro">
+    <button class="support-close" id="supportCloseBtn" type="button" aria-label="Close support window">×</button>
+    <div class="eyebrow">Help keep Archangel running</div>
+    <h2 id="supportTitle">Support Archangel</h2>
+    <p id="supportIntro">If Archangel has been useful to you, an optional contribution helps cover hosting, news-feed maintenance and future improvements. News and the Prayer Wall remain free for everyone.</p>
+    <span class="support-label">Your region and currency</span>
+    <div class="support-choice-row" role="group" aria-label="Choose currency">
+      <button class="support-choice" type="button" data-support-currency="GBP" aria-pressed="false">United Kingdom · GBP (£)</button>
+      <button class="support-choice" type="button" data-support-currency="USD" aria-pressed="false">United States · USD ($)</button>
+    </div>
+    <span class="support-label">How would you like to support?</span>
+    <div class="support-choice-row" role="group" aria-label="Choose payment frequency">
+      <button class="support-choice" type="button" data-support-frequency="once" aria-pressed="true">One-off</button>
+      <button class="support-choice" type="button" data-support-frequency="monthly" aria-pressed="false">Monthly</button>
+    </div>
+    <span class="support-label">Choose an amount</span>
+    <div class="support-amounts" id="supportAmounts"></div>
+    <button class="support-pay" id="supportPayBtn" type="button" disabled>Continue to secure checkout</button>
+    <div class="support-status" id="supportStatus" role="status" aria-live="polite">Payment links need to be configured before support can be accepted.</div>
+    <p class="support-note">Contributions are voluntary and support the running of this publication. They are not charitable donations and are not represented as tax-deductible. Payments are processed by Stripe when checkout is configured.</p>
+  </section>
+</div>
+
 <div class="toast" id="toast" role="status"></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./config.js"></script>
+<script src="./payment-links.js"></script>
 <script>
 const figures=[
   {
@@ -607,4 +656,56 @@ setInterval(() => {
   if (document.visibilityState === "visible") loadLiveFeed(false);
 }, 3 * 60 * 1000);
 window.addEventListener("focus", () => loadLiveFeed(false));;
+
+// Support Archangel: Stripe-hosted Payment Links. No card details are collected on this site.
+(function initArchangelSupport(){
+  const overlay=document.getElementById('supportOverlay');
+  if(!overlay) return;
+  const currencyButtons=[...overlay.querySelectorAll('[data-support-currency]')];
+  const frequencyButtons=[...overlay.querySelectorAll('[data-support-frequency]')];
+  const amountsHost=document.getElementById('supportAmounts');
+  const payBtn=document.getElementById('supportPayBtn');
+  const status=document.getElementById('supportStatus');
+  const links=window.ARCHANGEL_PAYMENT_LINKS||{};
+  const params=new URLSearchParams(location.search);
+  let currency=(params.get('currency')||'').toUpperCase();
+  if(currency!=='GBP'&&currency!=='USD'){
+    const locale=(navigator.language||'en-GB').toUpperCase();
+    currency=/(^|[-_])US($|[-_])/.test(locale)?'USD':'GBP';
+  }
+  let frequency='once';
+  let amount=currency==='USD'?'10':'5';
+  const currencySymbol=()=>currency==='USD'?'$':'£';
+  const choices=()=>currency==='USD'?['5','10','20']:['3','5','10'];
+  function linkFor(){
+    if(!links[currency]) return '';
+    if(frequency==='once') return links[currency].once||'';
+    return (links[currency].monthly||{})[amount]||'';
+  }
+  function render(){
+    currencyButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.supportCurrency===currency)));
+    frequencyButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.supportFrequency===frequency)));
+    if(!choices().includes(amount)) amount=choices()[1];
+    amountsHost.innerHTML=choices().map(a=>`<button type="button" class="support-amount" data-support-amount="${a}" aria-pressed="${a===amount}">${currencySymbol()}${a}<small>${frequency==='monthly'?'per month':'one-off'}</small></button>`).join('');
+    amountsHost.querySelectorAll('[data-support-amount]').forEach(b=>b.addEventListener('click',()=>{amount=b.dataset.supportAmount;render()}));
+    const link=linkFor();
+    payBtn.disabled=!link;
+    status.textContent=link?'You will continue to Stripe’s secure checkout.':'Payment links are not configured yet. Add your Stripe links to public/payment-links.js before enabling contributions.';
+    payBtn.textContent=frequency==='monthly'?'Continue to monthly checkout':'Continue to secure checkout';
+  }
+  function open(){overlay.hidden=false;document.body.style.overflow='hidden';render();document.getElementById('supportCloseBtn').focus()}
+  function close(){overlay.hidden=true;document.body.style.overflow='';document.getElementById('supportOpenBtn').focus()}
+  document.getElementById('supportOpenBtn').addEventListener('click',open);
+  document.getElementById('supportCloseBtn').addEventListener('click',close);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.hidden)close()});
+  currencyButtons.forEach(b=>b.addEventListener('click',()=>{currency=b.dataset.supportCurrency;amount=currency==='USD'?'10':'5';render()}));
+  frequencyButtons.forEach(b=>b.addEventListener('click',()=>{frequency=b.dataset.supportFrequency;render()}));
+  payBtn.addEventListener('click',()=>{const link=linkFor();if(link){if(!/^https:\/\/buy\.stripe\.com\//i.test(link)){status.textContent='This payment link does not look like a Stripe Payment Link. Please check public/payment-links.js.';return}window.location.href=link}});
+  // Stripe can redirect back with a success/cancel query string after the hosted checkout is configured.
+  if(params.get('support')==='success') setTimeout(()=>alert('Thank you for supporting Archangel. Your contribution helps keep the publication running.'),250);
+  if(params.get('support')==='cancelled') setTimeout(()=>alert('Your checkout was cancelled. No payment was completed.'),250);
+  render();
+})();
+
 </script></body></html>
