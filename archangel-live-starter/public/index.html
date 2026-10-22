@@ -129,6 +129,15 @@ const figures=[
     icon:"✝",
     source:"The Methodist Church",
     url:"https://www.methodist.org.uk/about/news/"
+  },
+  {
+    id:"debra-wallace-padgett",
+    name:"Bishop Debra Wallace-Padgett",
+    tradition:"Christianity",
+    role:"President of the World Methodist Council",
+    icon:"✝",
+    source:"World Methodist Council",
+    url:"https://worldmethodistcouncil.org/president/"
   }
 ];
 const stories=[];
@@ -195,6 +204,10 @@ function findRelatedFigures(story, sourceName="") {
     if (f.id === "mark-slaney") {
       // Only attach stories that explicitly mention Mark; the Methodist news feed covers many topics.
       return /\b(mark slaney|the rev(?:erend)?\.? mark slaney|the revd mark slaney)\b/i.test(text);
+    }
+    if (f.id === "debra-wallace-padgett") {
+      // The World Methodist Council feed covers the whole global Methodist movement.
+      return /\b(debra wallace[- ]padgett|bishop debra|bishop wallace[- ]padgett)\b/i.test(text);
     }
     return false;
   }).map(f => f.id);
@@ -337,29 +350,29 @@ async function loadLiveFeed(manual = false) {
       .order("published_at", { ascending: false, nullsFirst: false }).limit(100);
     if (recentError) throw recentError;
 
-    // Also load all available stories from Sarah's official source, even if
-    // they are older than the 100 newest stories in the general feed.
-    const { data: sarahSources, error: sourceError } = await client.from("sources")
+    // Also load all available stories from the official Sarah and global Methodist sources,
+    // even if they are older than the 100 newest stories in the general feed.
+    const { data: prioritySources, error: sourceError } = await client.from("sources")
       .select("id")
-      .eq("name", "Archbishop of Canterbury")
+      .in("name", ["Archbishop of Canterbury", "World Methodist Council — News"])
       .eq("enabled", true);
     if (sourceError) throw sourceError;
 
-    let sarahData = [];
-    const sarahSourceIds = (sarahSources || []).map(source => source.id);
-    if (sarahSourceIds.length) {
+    let priorityData = [];
+    const prioritySourceIds = (prioritySources || []).map(source => source.id);
+    if (prioritySourceIds.length) {
       const { data: officialStories, error: officialError } = await client.from("stories")
         .select(storyFields)
-        .in("source_id", sarahSourceIds)
+        .in("source_id", prioritySourceIds)
         .order("published_at", { ascending: false, nullsFirst: false })
         .limit(100);
       if (officialError) throw officialError;
-      sarahData = officialStories || [];
+      priorityData = officialStories || [];
     }
 
     // Merge the two sets and deduplicate by story ID.
     const merged = new Map();
-    [...(recentData || []), ...sarahData].forEach(story => merged.set(story.id, story));
+    [...(recentData || []), ...priorityData].forEach(story => merged.set(story.id, story));
     const data = [...merged.values()].sort((a, b) =>
       new Date(b.published_at || 0) - new Date(a.published_at || 0)
     );
