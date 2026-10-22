@@ -50,13 +50,19 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
   font-size: 12px;
 }
 
+
+.prayer-panel{background:#fffdf8;border:1px solid var(--line);border-radius:18px;padding:clamp(18px,3vw,30px);box-shadow:var(--shadow);margin:0 0 24px}
+.prayer-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.prayer-form{display:grid;gap:12px}.prayer-form label{font-size:13px;font-weight:700;display:grid;gap:6px}.prayer-form input,.prayer-form textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;padding:11px 12px;color:var(--ink);font:inherit}.prayer-form textarea{min-height:110px;resize:vertical}.prayer-form .consent{display:flex;align-items:flex-start;gap:9px;font-weight:400;color:var(--muted);font-size:12px}.prayer-form .consent input{width:auto;margin-top:4px}.prayer-help{font-size:12px;color:var(--muted);line-height:1.55}.prayer-cards{display:grid;gap:12px}.prayer-card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px}.prayer-card h3{font-size:14px;margin:0 0 6px}.prayer-card p{margin:0;color:#52586e;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}.prayer-card small{display:block;margin-top:10px;color:var(--muted);font-size:11px}.prayer-status{font-size:12px;color:var(--muted);min-height:18px}
+@media(max-width:760px){.prayer-grid{grid-template-columns:1fr}}
+
 [hidden]{display:none!important}
 </style>
 </head>
 <body><div class="app" id="homeTop">
 <header class="topbar">
 <a class="brand" href="#homeTop" aria-label="Archangel home"><div class="brandmark" role="img" aria-label="Archangel winged cross emblem"><svg viewBox="0 0 965 750" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" focusable="false"><path d="M 857.0,19.0 L 855.0,57.0 L 845.0,97.0 L 830.0,132.0 L 803.0,175.0 L 771.0,213.0 L 742.0,241.0 L 704.0,272.0 L 654.0,308.0 L 636.0,324.0 L 617.0,346.0 L 606.0,365.0 L 596.0,401.0 L 598.0,493.0 L 594.0,525.0 L 585.0,557.0 L 574.0,581.0 L 560.0,602.0 L 542.0,620.0 L 542.0,666.0 L 594.0,658.0 L 638.0,646.0 L 685.0,627.0 L 716.0,610.0 L 749.0,586.0 L 772.0,564.0 L 792.0,539.0 L 802.0,520.0 L 785.0,523.0 L 738.0,523.0 L 704.0,527.0 L 668.0,539.0 L 643.0,555.0 L 642.0,553.0 L 653.0,541.0 L 671.0,527.0 L 701.0,514.0 L 741.0,507.0 L 796.0,505.0 L 826.0,499.0 L 843.0,493.0 L 863.0,483.0 L 884.0,468.0 L 907.0,443.0 L 924.0,414.0 L 935.0,380.0 L 938.0,357.0 L 905.0,386.0 L 864.0,407.0 L 819.0,419.0 L 738.0,431.0 L 701.0,442.0 L 677.0,453.0 L 675.0,452.0 L 685.0,444.0 L 712.0,429.0 L 824.0,392.0 L 874.0,368.0 L 899.0,349.0 L 916.0,331.0 L 931.0,309.0 L 940.0,290.0 L 946.0,271.0 L 950.0,247.0 L 950.0,217.0 L 942.0,175.0 L 927.0,208.0 L 914.0,228.0 L 897.0,248.0 L 874.0,269.0 L 826.0,300.0 L 760.0,330.0 L 757.0,329.0 L 802.0,299.0 L 838.0,267.0 L 869.0,226.0 L 888.0,183.0 L 896.0,139.0 L 894.0,99.0 L 889.0,77.0 L 880.0,53.0 L 866.0,29.0 Z" fill="#182F67"/><path d="M 109.0,18.0 L 96.0,34.0 L 85.0,54.0 L 72.0,97.0 L 70.0,143.0 L 77.0,181.0 L 93.0,220.0 L 121.0,260.0 L 162.0,298.0 L 208.0,329.0 L 206.0,330.0 L 141.0,301.0 L 112.0,284.0 L 84.0,263.0 L 52.0,229.0 L 35.0,202.0 L 24.0,175.0 L 16.0,211.0 L 15.0,241.0 L 19.0,269.0 L 28.0,296.0 L 44.0,324.0 L 61.0,344.0 L 77.0,358.0 L 98.0,372.0 L 144.0,393.0 L 249.0,427.0 L 276.0,441.0 L 292.0,453.0 L 290.0,454.0 L 254.0,438.0 L 228.0,431.0 L 147.0,419.0 L 107.0,409.0 L 65.0,389.0 L 46.0,375.0 L 27.0,357.0 L 31.0,383.0 L 42.0,415.0 L 51.0,432.0 L 69.0,456.0 L 89.0,474.0 L 118.0,491.0 L 162.0,504.0 L 235.0,508.0 L 268.0,515.0 L 294.0,527.0 L 321.0,550.0 L 322.0,554.0 L 293.0,537.0 L 262.0,527.0 L 226.0,523.0 L 182.0,523.0 L 163.0,520.0 L 171.0,535.0 L 189.0,559.0 L 213.0,583.0 L 248.0,609.0 L 289.0,631.0 L 337.0,649.0 L 387.0,661.0 L 424.0,666.0 L 424.0,621.0 L 408.0,605.0 L 393.0,584.0 L 380.0,556.0 L 372.0,528.0 L 367.0,487.0 L 370.0,410.0 L 368.0,391.0 L 360.0,366.0 L 347.0,344.0 L 323.0,318.0 L 220.0,238.0 L 187.0,205.0 L 161.0,173.0 L 138.0,137.0 L 123.0,104.0 L 110.0,54.0 Z" fill="#182F67"/><path d="M 458.0,25.0 L 458.0,190.0 L 456.0,192.0 L 296.0,192.0 L 296.0,242.0 L 456.0,242.0 L 458.0,244.0 L 458.0,736.0 L 508.0,736.0 L 508.0,244.0 L 510.0,242.0 L 670.0,242.0 L 670.0,192.0 L 510.0,192.0 L 508.0,190.0 L 508.0,25.0 Z" fill="#C69A35"/></svg></div><div><strong>Archangel</strong><small>CHRISTIAN NEWS NETWORK</small></div></a>
-<nav class="toplinks"><button class="active" data-view="all">Discover</button><button data-view="following">Following</button><button data-view="saved">Saved stories</button><button type="button" id="mobileFiguresBtn" class="mobile-figures-btn">Figures to follow</button></nav>
+<nav class="toplinks"><button class="active" data-view="all">Discover</button><button data-view="following">Following</button><button data-view="saved">Saved stories</button><button type="button" id="prayerWallBtn">Prayer Wall</button><button type="button" id="mobileFiguresBtn" class="mobile-figures-btn">Figures to follow</button></nav>
 <button class="profile-btn" id="howBtn">About Archangel ↗</button>
 </header>
 <section class="hero"><div class="hero-inner">
@@ -89,6 +95,23 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
     <div id="chapterHeading" style="font-weight:700;font-size:18px;margin:16px 0 10px"></div>
     <div id="chapterText" style="line-height:1.9;font-size:15px;white-space:normal"></div>
     <p id="bibleStatus" style="font-size:12px;color:var(--muted);margin:12px 0 0"></p>
+  </div>
+</section>
+<section id="prayerWallSection" hidden class="prayer-panel" aria-labelledby="prayerWallTitle">
+  <div class="eyebrow">A community in prayer</div><h2 id="prayerWallTitle" style="font-family:var(--brand-serif);font-size:30px;margin:5px 0 8px">Prayer Wall</h2>
+  <p style="color:var(--muted);margin:0 0 22px;max-width:760px">Share a short prayer request with the Archangel community. Requests are reviewed before they appear publicly, so you can ask for prayer without immediately publishing personal details.</p>
+  <div class="prayer-grid">
+    <div><h3 style="margin:0 0 12px">Submit a prayer request</h3>
+      <form id="prayerRequestForm" class="prayer-form">
+        <label for="prayerName">Name to display <span style="font-weight:400;color:var(--muted)">(optional; leave blank to appear as “Anonymous”)</span><input id="prayerName" name="display_name" maxlength="50" autocomplete="nickname" placeholder="First name or anonymous"></label>
+        <label for="prayerText">Your prayer request <span style="font-weight:400;color:var(--muted)">(max 500 characters)</span><textarea id="prayerText" name="request_text" maxlength="500" required placeholder="What would you like the community to pray for?"></textarea></label>
+        <label class="consent"><input id="prayerConsent" type="checkbox" required><span>I understand this request may be published for other visitors to read and pray for, after review. I will not include private contact details or information about another person without their permission.</span></label>
+        <button class="refresh" id="prayerSubmitBtn" type="submit">Send prayer request</button>
+        <div class="prayer-status" id="prayerFormStatus" role="status" aria-live="polite"></div>
+      </form>
+      <p class="prayer-help">Please keep requests respectful and brief. Avoid addresses, phone numbers, medical record details, or other information you would not want shared publicly. Submission does not guarantee publication.</p>
+    </div>
+    <div><h3 style="margin:0 0 12px">Pray for others</h3><div id="prayerCards" class="prayer-cards"><div class="empty">Loading prayer requests…</div></div><p id="prayerListStatus" class="prayer-status" role="status"></p></div>
   </div>
 </section>
 <div class="layout" id="newsLayout"><section><div class="feed-head"><div><h2 id="feedTitle">Latest updates</h2><p id="feedSubtitle">Connecting to configured sources…</p></div><div class="sort" id="countLabel">6 stories</div></div><div class="stories" id="stories"></div></section>
@@ -427,6 +450,57 @@ function closeBibleSection(){ $("bibleSection").hidden=true; $("newsLayout").hid
 $("bibleCategoryBtn").addEventListener("click",()=>{const opening=$("bibleSection").hidden;if(opening){$("bibleSection").hidden=false;$("newsLayout").hidden=true;document.querySelector(".toolbar").hidden=true;$("bibleCategoryBtn").classList.add("active");$("bibleCategoryBtn").setAttribute("aria-expanded","true");loadBibleChapter();window.scrollTo({top:450,behavior:"smooth"})}else{closeBibleSection();window.scrollTo({top:450,behavior:"smooth"})}});
 document.addEventListener("click",event=>{if($("bibleSection").hidden)return;const clickedButton=event.target.closest("button");if(clickedButton&&!$("bibleSection").contains(clickedButton)&&clickedButton.id!=="bibleCategoryBtn"){closeBibleSection();}});
 
+
+const prayerWallBtn = $("prayerWallBtn");
+let prayerWallOpen = false;
+function showPrayerWall(open) {
+  prayerWallOpen = open;
+  $("prayerWallSection").hidden = !open;
+  $("newsLayout").hidden = open;
+  $("religionTabs").hidden = open;
+  $("bibleCategoryBtn").parentElement.hidden = open;
+  document.querySelector(".toolbar").hidden = open;
+  prayerWallBtn.classList.toggle("active", open);
+  prayerWallBtn.setAttribute("aria-pressed", String(open));
+  if (open) { loadPrayerRequests(); window.scrollTo({top:0,behavior:"smooth"}); }
+}
+prayerWallBtn.addEventListener("click",()=>showPrayerWall(!prayerWallOpen));
+function prayerClient() {
+  const cfg = window.ARCHANGEL_CONFIG || {};
+  if (!cfg.supabaseUrl || !cfg.supabaseAnonKey || !window.supabase) return null;
+  return window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);
+}
+function escapePrayerText(value) { return String(value ?? ""); }
+async function loadPrayerRequests() {
+  const host = $("prayerCards");
+  const client = prayerClient();
+  if (!client) { host.innerHTML='<div class="empty"><strong>Prayer Wall is not connected yet</strong>Configure Supabase and run the supplied prayer-request SQL setup to enable submissions and public requests.</div>'; return; }
+  host.innerHTML='<div class="empty">Loading approved requests…</div>';
+  const {data,error} = await client.from("prayer_requests").select("id,display_name,request_text,created_at").eq("status","approved").order("created_at",{ascending:false}).limit(30);
+  if (error) { host.innerHTML='<div class="empty"><strong>Prayer requests are not available yet</strong>The Prayer Wall database setup may still be required.</div>'; $("prayerListStatus").textContent=""; return; }
+  host.replaceChildren();
+  if (!data || !data.length) { host.innerHTML='<div class="empty"><strong>No public requests yet</strong>When requests have been reviewed and approved, they will appear here.</div>'; return; }
+  data.forEach(item=>{
+    const card=document.createElement("article"); card.className="prayer-card";
+    const heading=document.createElement("h3"); heading.textContent=item.display_name || "Anonymous";
+    const body=document.createElement("p"); body.textContent=escapePrayerText(item.request_text);
+    const date=document.createElement("small"); date.textContent=item.created_at ? new Date(item.created_at).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}) : "Prayer request";
+    card.append(heading,body,date); host.append(card);
+  });
+}
+$("prayerRequestForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+  const status=$("prayerFormStatus"), button=$("prayerSubmitBtn"), client=prayerClient();
+  const requestText=$("prayerText").value.trim();
+  const displayName=$("prayerName").value.trim() || "Anonymous";
+  if (!client) { status.textContent="Prayer Wall is not connected yet. The database setup needs to be completed first."; return; }
+  if (!requestText) { status.textContent="Please enter a short prayer request."; return; }
+  button.disabled=true; status.textContent="Sending your request…";
+  const {error}=await client.from("prayer_requests").insert({display_name:displayName,request_text:requestText,status:"pending"});
+  button.disabled=false;
+  if (error) { console.error("Prayer request submission failed",error); status.textContent="We couldn't send that request. Please try again later."; return; }
+  $("prayerRequestForm").reset(); status.textContent="Thank you. Your request has been received and will be reviewed before publication.";
+});
 $("refresh").onclick=()=>loadLiveFeed(true);
 $("howBtn").onclick=()=>alert("Archangel brings together public updates from configured Christian institutional and news sources. Each card links to the original publisher. Source coverage is not exhaustive, and no single institution represents every Christian denomination. Follow and saved-story preferences are saved in this browser on this device. Following only includes stories that can be matched to a followed figure by name or configured source; some stories may not yet be linked to a figure.");
 renderFigures();renderStories();
