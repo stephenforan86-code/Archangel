@@ -74,6 +74,11 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
 .support-amount{border:1px solid var(--line);border-radius:12px;background:#fff;padding:14px 8px;font-size:18px;font-weight:800;color:var(--ink)}
 .support-amount[aria-pressed="true"]{border:2px solid var(--accent);background:var(--sage);padding:13px 7px}
 .support-amount small{display:block;font-size:10px;color:var(--muted);font-weight:600;margin-top:2px}
+.support-custom{display:flex;gap:8px;align-items:center;margin-top:10px}
+.support-custom label{font-size:13px;font-weight:700;white-space:nowrap}
+.support-custom input{width:100%;min-width:0;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit;color:var(--ink);background:white}
+.support-custom[hidden]{display:none}
+.support-hint{font-size:12px;color:var(--muted);margin:7px 0 0;line-height:1.45}
 .support-pay{width:100%;margin-top:18px;border:0;border-radius:12px;background:var(--accent);color:white;padding:13px 16px;font-weight:800;font-size:15px}
 .support-pay:disabled{opacity:.45;cursor:not-allowed}
 .support-note{background:#f4f1e9;border-radius:10px;padding:11px 12px;font-size:12px!important;margin-top:13px!important}
@@ -163,6 +168,8 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
     </div>
     <span class="support-label">Choose an amount</span>
     <div class="support-amounts" id="supportAmounts"></div>
+    <div class="support-custom" id="supportCustomWrap" hidden><label for="supportCustomAmount">Other amount</label><input id="supportCustomAmount" type="number" min="1" max="10000" step="0.01" inputmode="decimal" placeholder="Enter amount" aria-describedby="supportCustomHint"></div>
+    <p class="support-hint" id="supportCustomHint" hidden>For a custom one-off contribution, Stripe will ask you to confirm the amount again on its secure checkout page. Monthly support currently uses the preset amounts above.</p>
     <button class="support-pay" id="supportPayBtn" type="button" disabled>Continue to secure checkout</button>
     <div class="support-status" id="supportStatus" role="status" aria-live="polite">Payment links need to be configured before support can be accepted.</div>
     <p class="support-note">Contributions are voluntary and support the running of this publication. They are not charitable donations and are not represented as tax-deductible. Payments are processed by Stripe when checkout is configured.</p>
@@ -666,6 +673,9 @@ window.addEventListener("focus", () => loadLiveFeed(false));;
   const amountsHost=document.getElementById('supportAmounts');
   const payBtn=document.getElementById('supportPayBtn');
   const status=document.getElementById('supportStatus');
+  const customWrap=document.getElementById('supportCustomWrap');
+  const customInput=document.getElementById('supportCustomAmount');
+  const customHint=document.getElementById('supportCustomHint');
   const links=window.ARCHANGEL_PAYMENT_LINKS||{};
   const params=new URLSearchParams(location.search);
   let currency=(params.get('currency')||'').toUpperCase();
@@ -675,6 +685,7 @@ window.addEventListener("focus", () => loadLiveFeed(false));;
   }
   let frequency='once';
   let amount=currency==='USD'?'10':'5';
+  let customSelected=false;
   const currencySymbol=()=>currency==='USD'?'$':'£';
   const choices=()=>currency==='USD'?['5','10','20']:['3','5','10'];
   function linkFor(){
@@ -686,12 +697,20 @@ window.addEventListener("focus", () => loadLiveFeed(false));;
     currencyButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.supportCurrency===currency)));
     frequencyButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.supportFrequency===frequency)));
     if(!choices().includes(amount)) amount=choices()[1];
-    amountsHost.innerHTML=choices().map(a=>`<button type="button" class="support-amount" data-support-amount="${a}" aria-pressed="${a===amount}">${currencySymbol()}${a}<small>${frequency==='monthly'?'per month':'one-off'}</small></button>`).join('');
-    amountsHost.querySelectorAll('[data-support-amount]').forEach(b=>b.addEventListener('click',()=>{amount=b.dataset.supportAmount;render()}));
+    if(frequency==='monthly') customSelected=false;
+    amountsHost.innerHTML=choices().map(a=>`<button type="button" class="support-amount" data-support-amount="${a}" aria-pressed="${!customSelected&&a===amount}">${currencySymbol()}${a}<small>${frequency==='monthly'?'per month':'one-off'}</small></button>`).join('');
+    if(frequency==='once') amountsHost.innerHTML += `<button type="button" class="support-amount" data-support-custom="true" aria-pressed="${customSelected}">Custom<small>your choice</small></button>`;
+    amountsHost.querySelectorAll('[data-support-amount]').forEach(b=>b.addEventListener('click',()=>{amount=b.dataset.supportAmount;customSelected=false;render()}));
+    amountsHost.querySelectorAll('[data-support-custom]').forEach(b=>b.addEventListener('click',()=>{customSelected=true;render();customInput.focus()}));
+    customWrap.hidden=!(frequency==='once'&&customSelected);
+    customHint.hidden=!(frequency==='once'&&customSelected);
+    customInput.value=customInput.value;
     const link=linkFor();
-    payBtn.disabled=!link;
-    status.textContent=link?'You will continue to Stripe’s secure checkout.':'Payment links are not configured yet. Add your Stripe links to public/payment-links.js before enabling contributions.';
-    payBtn.textContent=frequency==='monthly'?'Continue to monthly checkout':'Continue to secure checkout';
+    const customValue=Number(customInput.value);
+    const customValid=!customSelected||(Number.isFinite(customValue)&&customValue>=1&&customValue<=10000);
+    payBtn.disabled=!link||!customValid;
+    status.textContent=link?(customSelected?'Stripe will ask you to enter your chosen amount again at checkout.':'You will continue to Stripe’s secure checkout.'):'Payment links are not configured yet. Add your Stripe links to public/payment-links.js before enabling contributions.';
+    payBtn.textContent=frequency==='monthly'?'Continue to monthly checkout':(customSelected?'Continue with custom amount':'Continue to secure checkout');
   }
   function open(){overlay.hidden=false;document.body.style.overflow='hidden';render();document.getElementById('supportCloseBtn').focus()}
   function close(){overlay.hidden=true;document.body.style.overflow='';document.getElementById('supportOpenBtn').focus()}
@@ -699,8 +718,9 @@ window.addEventListener("focus", () => loadLiveFeed(false));;
   document.getElementById('supportCloseBtn').addEventListener('click',close);
   overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.hidden)close()});
-  currencyButtons.forEach(b=>b.addEventListener('click',()=>{currency=b.dataset.supportCurrency;amount=currency==='USD'?'10':'5';render()}));
-  frequencyButtons.forEach(b=>b.addEventListener('click',()=>{frequency=b.dataset.supportFrequency;render()}));
+  currencyButtons.forEach(b=>b.addEventListener('click',()=>{currency=b.dataset.supportCurrency;amount=currency==='USD'?'10':'5';customSelected=false;render()}));
+  frequencyButtons.forEach(b=>b.addEventListener('click',()=>{frequency=b.dataset.supportFrequency;customSelected=false;render()}));
+  customInput.addEventListener('input',()=>{const link=linkFor();const v=Number(customInput.value);payBtn.disabled=!link||!Number.isFinite(v)||v<1||v>10000;if(customSelected)status.textContent='Stripe will ask you to enter your chosen amount again at checkout.'});
   payBtn.addEventListener('click',()=>{const link=linkFor();if(link){if(!/^https:\/\/buy\.stripe\.com\//i.test(link)){status.textContent='This payment link does not look like a Stripe Payment Link. Please check public/payment-links.js.';return}window.location.href=link}});
   // Stripe can redirect back with a success/cancel query string after the hosted checkout is configured.
   if(params.get('support')==='success') setTimeout(()=>alert('Thank you for supporting Archangel. Your contribution helps keep the publication running.'),250);
