@@ -156,6 +156,15 @@ const figures=[
     icon:"☦",
     source:"Ecumenical Patriarchate",
     url:"https://ec-patr.org/en/"
+  },
+  {
+    id:"robert-barron",
+    name:"Bishop Robert Barron",
+    tradition:"Christianity",
+    role:"Bishop of Winona-Rochester · Founder of Word on Fire",
+    icon:"✝",
+    source:"Word on Fire",
+    url:"https://www.wordonfire.org/author/bishop-robert-barron/"
   }
 ];
 const stories=[];
@@ -234,6 +243,10 @@ function findRelatedFigures(story, sourceName="") {
     if (f.id === "bartholomew") {
       // Orthodox Patriarchate news is broad; only attach stories explicitly about Bartholomew.
       return /\b(ecumenical patriarch bartholomew|patriarch bartholomew|bartholomew of constantinople|bartholomew i)\b/i.test(text);
+    }
+    if (f.id === "robert-barron") {
+      // Word on Fire publishes many kinds of content; only attach explicit mentions of Bishop Barron.
+      return /\b(robert barron|bishop barron|bishop robert barron)\b/i.test(text);
     }
     return false;
   }).map(f => f.id);
