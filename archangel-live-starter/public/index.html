@@ -147,6 +147,15 @@ const figures=[
     icon:"✝",
     source:"World Methodist Council",
     url:"https://worldmethodistcouncil.org/general-secretary/"
+  },
+  {
+    id:"bartholomew",
+    name:"Ecumenical Patriarch Bartholomew",
+    tradition:"Christianity",
+    role:"Archbishop of Constantinople · Eastern Orthodox Church",
+    icon:"☦",
+    source:"Ecumenical Patriarchate",
+    url:"https://ec-patr.org/en/"
   }
 ];
 const stories=[];
@@ -221,6 +230,10 @@ function findRelatedFigures(story, sourceName="") {
     if (f.id === "reynaldo-leao-neto") {
       // Match explicit mentions only; do not attach every Council story to its General Secretary.
       return /\b(reynaldo ferreira le[aã]o neto|reynaldo le[aã]o neto|revd?\.? dr\.? reynaldo|reverend doctor reynaldo)\b/i.test(text);
+    }
+    if (f.id === "bartholomew") {
+      // Orthodox Patriarchate news is broad; only attach stories explicitly about Bartholomew.
+      return /\b(ecumenical patriarch bartholomew|patriarch bartholomew|bartholomew of constantinople|bartholomew i)\b/i.test(text);
     }
     return false;
   }).map(f => f.id);
