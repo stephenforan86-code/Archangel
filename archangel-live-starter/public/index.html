@@ -99,7 +99,7 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
 </section>
 <section id="prayerWallSection" hidden class="prayer-panel" aria-labelledby="prayerWallTitle">
   <div class="eyebrow">A community in prayer</div><h2 id="prayerWallTitle" style="font-family:var(--brand-serif);font-size:30px;margin:5px 0 8px">Prayer Wall</h2>
-  <p style="color:var(--muted);margin:0 0 22px;max-width:760px">Share a short prayer request with the Archangel community. Requests are reviewed before they appear publicly, so you can ask for prayer without immediately publishing personal details.</p>
+  <p style="color:var(--muted);margin:0 0 10px;max-width:760px">Share a short prayer request with the Archangel community. Requests are reviewed before they appear publicly, so you can ask for prayer without immediately publishing personal details.</p>
   <div class="prayer-grid">
     <div><h3 style="margin:0 0 12px">Submit a prayer request</h3>
       <form id="prayerRequestForm" class="prayer-form">
@@ -476,7 +476,7 @@ async function loadPrayerRequests() {
   const client = prayerClient();
   if (!client) { host.innerHTML='<div class="empty"><strong>Prayer Wall is not connected yet</strong>Configure Supabase and run the supplied prayer-request SQL setup to enable submissions and public requests.</div>'; return; }
   host.innerHTML='<div class="empty">Loading approved requests…</div>';
-  const {data,error} = await client.from("prayer_requests").select("id,display_name,request_text,created_at").eq("status","approved").order("created_at",{ascending:false}).limit(30);
+  const {data,error} = await client.from("prayer_requests").select("id,display_name,request_text,created_at,is_starter").eq("status","approved").order("created_at",{ascending:false}).limit(30);
   if (error) { host.innerHTML='<div class="empty"><strong>Prayer requests are not available yet</strong>The Prayer Wall database setup may still be required.</div>'; $("prayerListStatus").textContent=""; return; }
   host.replaceChildren();
   if (!data || !data.length) { host.innerHTML='<div class="empty"><strong>No public requests yet</strong>When requests have been reviewed and approved, they will appear here.</div>'; return; }
@@ -484,7 +484,7 @@ async function loadPrayerRequests() {
     const card=document.createElement("article"); card.className="prayer-card";
     const heading=document.createElement("h3"); heading.textContent=item.display_name || "Anonymous";
     const body=document.createElement("p"); body.textContent=escapePrayerText(item.request_text);
-    const date=document.createElement("small"); date.textContent=item.created_at ? new Date(item.created_at).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}) : "Prayer request";
+    const date=document.createElement("small"); date.textContent=item.is_starter ? "Prayer request" : (item.created_at ? new Date(item.created_at).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}) : "Prayer request");
     card.append(heading,body,date); host.append(card);
   });
 }
