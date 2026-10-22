@@ -189,7 +189,6 @@ main{max-width:1180px;margin:28px auto;padding:0 24px 60px}.toolbar{display:flex
 <div class="toast" id="toast" role="status"></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./config.js"></script>
-<script src="./payment-links.js"></script>
 <script>
 const figures=[
   {
@@ -674,7 +673,7 @@ setInterval(() => {
 }, 3 * 60 * 1000);
 window.addEventListener("focus", () => loadLiveFeed(false));;
 
-// Support Archangel: Stripe-hosted Payment Links. No card details are collected on this site.
+// Support Archangel: create a secure Stripe Checkout Session through the Cloudflare Worker.
 (function initArchangelSupport(){
   const overlay=document.getElementById('supportOverlay');
   if(!overlay) return;
@@ -686,7 +685,6 @@ window.addEventListener("focus", () => loadLiveFeed(false));;
   const customWrap=document.getElementById('supportCustomWrap');
   const customInput=document.getElementById('supportCustomAmount');
   const customHint=document.getElementById('supportCustomHint');
-  const links=window.ARCHANGEL_PAYMENT_LINKS||{};
   const params=new URLSearchParams(location.search);
   let currency=(params.get('currency')||'').toUpperCase();
   if(currency!=='GBP'&&currency!=='USD'){
@@ -698,11 +696,6 @@ window.addEventListener("focus", () => loadLiveFeed(false));;
   let customSelected=false;
   const currencySymbol=()=>currency==='USD'?'$':'£';
   const choices=()=>currency==='USD'?['5','10','20']:['2.99','4.99','9.99','19.99'];
-  function linkFor(){
-    if(!links[currency]) return '';
-    if(frequency==='once') return links[currency].once||'';
-    return (links[currency].monthly||{})[amount]||'';
-  }
   function render(){
     currencyButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.supportCurrency===currency)));
     frequencyButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.supportFrequency===frequency)));
@@ -714,12 +707,10 @@ window.addEventListener("focus", () => loadLiveFeed(false));;
     amountsHost.querySelectorAll('[data-support-custom]').forEach(b=>b.addEventListener('click',()=>{customSelected=true;render();customInput.focus()}));
     customWrap.hidden=!(frequency==='once'&&customSelected);
     customHint.hidden=!(frequency==='once'&&customSelected);
-    customInput.value=customInput.value;
-    const link=linkFor();
     const customValue=Number(customInput.value);
-    const customValid=!customSelected||(Number.isFinite(customValue)&&customValue>=1&&customValue<=10000);
-    payBtn.disabled=!link||!customValid;
-    status.textContent=link?(customSelected?'Stripe will ask you to enter your chosen amount again at checkout.':'You will continue to Stripe’s secure checkout.'):'Payment links are not configured yet. Add your Stripe links to public/payment-links.js before enabling contributions.';
+    const customValid=!customSelected||(customInput.value.trim()!==''&&Number.isFinite(customValue)&&customValue>=1&&customValue<=10000);
+    payBtn.disabled=!customValid;
+    status.textContent='You will continue to Stripe’s secure checkout.';
     payBtn.textContent=frequency==='monthly'?'Continue to monthly checkout':(customSelected?'Continue with custom amount':'Continue to secure checkout');
   }
   function open(){overlay.hidden=false;document.body.style.overflow='hidden';render();document.getElementById('supportCloseBtn').focus()}
@@ -730,9 +721,26 @@ window.addEventListener("focus", () => loadLiveFeed(false));;
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.hidden)close()});
   currencyButtons.forEach(b=>b.addEventListener('click',()=>{currency=b.dataset.supportCurrency;amount=currency==='USD'?'10':'4.99';customSelected=false;render()}));
   frequencyButtons.forEach(b=>b.addEventListener('click',()=>{frequency=b.dataset.supportFrequency;customSelected=false;render()}));
-  customInput.addEventListener('input',()=>{const link=linkFor();const v=Number(customInput.value);payBtn.disabled=!link||!Number.isFinite(v)||v<1||v>10000;if(customSelected)status.textContent='Stripe will ask you to enter your chosen amount again at checkout.'});
-  payBtn.addEventListener('click',()=>{const link=linkFor();if(link){if(!/^https:\/\/buy\.stripe\.com\//i.test(link)){status.textContent='This payment link does not look like a Stripe Payment Link. Please check public/payment-links.js.';return}window.location.href=link}});
-  // Stripe can redirect back with a success/cancel query string after the hosted checkout is configured.
+  customInput.addEventListener('input',render);
+  payBtn.addEventListener('click',async()=>{
+    const customValue=Number(customInput.value);
+    if(customSelected&&(customInput.value.trim()===''||!Number.isFinite(customValue)||customValue<1||customValue>10000)){
+      status.textContent='Enter a custom amount between 1 and 10,000.';return;
+    }
+    payBtn.disabled=true;status.textContent='Connecting securely to Stripe…';
+    try{
+      const response=await fetch('/api/create-checkout-session',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({currency,frequency,amount:customSelected?customValue: Number(amount),custom:customSelected})
+      });
+      const data=await response.json();
+      if(!response.ok||!data.url) throw new Error(data.error||'Checkout could not be created.');
+      window.location.assign(data.url);
+    }catch(error){
+      status.textContent=error.message||'Unable to start checkout. Please try again.';
+      payBtn.disabled=false;
+    }
+  });
   if(params.get('support')==='success') setTimeout(()=>alert('Thank you for supporting Archangel. Your contribution helps keep the publication running.'),250);
   if(params.get('support')==='cancelled') setTimeout(()=>alert('Your checkout was cancelled. No payment was completed.'),250);
   render();
